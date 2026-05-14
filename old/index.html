@@ -171,7 +171,20 @@
   .sec-body { padding: 0 16px 16px; display: none; }
   .sec-body.open { display: block; }
 
-  
+  /* ── FORMATEUR NOTE ── */
+  .fn {
+    border-left: 3px solid var(--navy);
+    background: var(--bg);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 11px; color: var(--muted); line-height: 1.65;
+  }
+  .fn-label {
+    font-size: 10px; font-weight: 600;
+    color: var(--navy); margin-bottom: 3px;
+    display: flex; align-items: center; gap: 4px;
+  }
 
   /* ── CONCEPT / ANALOGY ── */
   .concept {
@@ -429,8 +442,8 @@
   </div>
 
   <div class="protocol">
-    <i class="ti ti-info-circle"></i>
-    <div><strong>Comment utiliser ce lab :</strong> ouvrez chaque section dans l'ordre · lisez le contenu · répondez individuellement aux questions · les sections 5 et 6 (micro-lab) se font en binômes, 20 min chrono · révélez les corrections après discussion.</div>
+    <i class="ti ti-presentation"></i>
+    <div><strong>Protocole formateur :</strong> projeter chaque section · expliquer 2 min à l'oral · laisser 3 min aux participants pour répondre individuellement · sondage à main levée · discussion 2 min · passer à la suivante. Le micro-lab (sections 5–6) se fait en binômes, 20 min chrono.</div>
   </div>
 
   <div class="progress-wrap">
@@ -450,7 +463,9 @@
       </div>
     </div>
     <div class="sec-body" id="b1">
-Commencer par demander : "Qui a déjà été bloqué par une requête SQL trop lente sur un gros volume ?" — créer l'ancrage avant d'expliquer. Insister sur le fait que le problème est physique, pas logiciel.
+      <div class="fn">
+        <div class="fn-label"><i class="ti ti-presentation"></i> Note formateur</div>
+        Commencer par demander : "Qui a déjà été bloqué par une requête SQL trop lente sur un gros volume ?" — créer l'ancrage avant d'expliquer. Insister sur le fait que le problème est physique, pas logiciel.
       </div>
       <div class="concept">
         <strong>Le point de départ :</strong> une base relationnelle classique fonctionne très bien jusqu'à quelques dizaines de Go. Au-delà, les requêtes ralentissent, les jointures explosent, et le serveur atteint ses limites physiques. Visa traite 65 milliards de transactions par an — ces volumes ne rentrent plus dans une seule machine.
@@ -492,7 +507,9 @@ Commencer par demander : "Qui a déjà été bloqué par une requête SQL trop l
       </div>
     </div>
     <div class="sec-body" id="b2">
-Présenter les 5V comme un outil de diagnostic, pas comme une liste à mémoriser. Demander aux participants de trouver eux-mêmes l'exemple finance pour chaque V avant de le révéler.
+      <div class="fn">
+        <div class="fn-label"><i class="ti ti-presentation"></i> Note formateur</div>
+        Présenter les 5V comme un outil de diagnostic, pas comme une liste à mémoriser. Demander aux participants de trouver eux-mêmes l'exemple finance pour chaque V avant de le révéler.
       </div>
       <div class="v-rows">
         <div class="v-row"><div class="v-name" style="color:#1e3a8a">Volume</div><div class="v-content"><div class="v-text">Quantité dépassant la capacité d'une machine.</div><div class="v-fin">Visa : 100 Po stockés · PayPal : 15 Mds tx/an</div></div></div>
@@ -529,7 +546,9 @@ Présenter les 5V comme un outil de diagnostic, pas comme une liste à mémorise
       </div>
     </div>
     <div class="sec-body" id="b3">
-Poser la question d'abord : "Comment vous y prendriez-vous pour calculer le solde de 10 millions de comptes le plus vite possible ?" — 1 min de réflexion avant de donner la réponse.
+      <div class="fn">
+        <div class="fn-label"><i class="ti ti-presentation"></i> Note formateur</div>
+        Poser la question d'abord : "Comment vous y prendriez-vous pour calculer le solde de 10 millions de comptes le plus vite possible ?" — 1 min de réflexion avant de donner la réponse.
       </div>
       <div class="concept">
         <strong>L'idée centrale :</strong> au lieu d'amener les données vers le calcul, on amène le calcul vers les données. On divise un problème en sous-problèmes traités en parallèle sur les machines où les données résident déjà.
@@ -578,7 +597,9 @@ Poser la question d'abord : "Comment vous y prendriez-vous pour calculer le sold
       </div>
     </div>
     <div class="sec-body" id="b4">
-Demander : "Qui utilise un Data Warehouse dans son organisation ? Qui a déjà eu des problèmes avec ?" — puis expliquer que le Lakehouse n'est pas une mode : c'est ce que Databricks, Snowflake et les grandes banques déploient aujourd'hui en production.
+      <div class="fn">
+        <div class="fn-label"><i class="ti ti-presentation"></i> Note formateur</div>
+        Demander : "Qui utilise un Data Warehouse dans son organisation ? Qui a déjà eu des problèmes avec ?" — puis expliquer que le Lakehouse n'est pas une mode : c'est ce que Databricks, Snowflake et les grandes banques déploient aujourd'hui en production.
       </div>
       <div class="plat-stack">
         <div class="plat-item">
@@ -629,7 +650,9 @@ Demander : "Qui utilise un Data Warehouse dans son organisation ? Qui a déjà e
         <i class="ti ti-users" style="font-size:14px"></i>
         En binômes · 20 min chrono · cocher les V impliqués pour chaque scénario · révéler la correction · discuter
       </div>
-Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correction collective : pour chaque scénario, demander à un binôme de justifier ses choix avant de révéler. Ne pas corriger immédiatement — laisser le débat s'installer. Le scénario 5 est un piège intentionnel.
+      <div class="fn">
+        <div class="fn-label"><i class="ti ti-presentation"></i> Note formateur</div>
+        Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correction collective : pour chaque scénario, demander à un binôme de justifier ses choix avant de révéler. Ne pas corriger immédiatement — laisser le débat s'installer. Le scénario 5 est un piège intentionnel.
       </div>
       <div class="scenario-grid">
 
@@ -728,7 +751,9 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
       </div>
     </div>
     <div class="sec-body" id="b6">
-Tour de table rapide : chaque participant dit en une phrase ce qu'il retient. Puis annoncer : "Maintenant qu'on sait identifier un problème Big Data, on va voir comment les architectures y répondent." → transition vers M2.
+      <div class="fn">
+        <div class="fn-label"><i class="ti ti-presentation"></i> Note formateur</div>
+        Tour de table rapide : chaque participant dit en une phrase ce qu'il retient. Puis annoncer : "Maintenant qu'on sait identifier un problème Big Data, on va voir comment les architectures y répondent." → transition vers M2.
       </div>
       <div class="synthese-points">
         <div class="syn-point">

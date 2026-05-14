@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 2 — HDFS sur GitHub Codespaces | ISCAE 2025-2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#1E2761;--navy-dark:#141c4a;--gold:#E8B84B;--bg:#f4f6ff;--card:#fff;--border:#dde3f5;--text:#1a2040;--muted:#64748b;--hint:#94a3b8;--success-bg:#ecfdf5;--success-text:#065f46;--success-border:#6ee7b7;--danger-bg:#fef2f2;--danger-text:#991b1b;--danger-border:#fca5a5;--info-bg:#eff6ff;--info-text:#1e40af;--info-border:#93c5fd;--warn-bg:#fffbeb;--warn-text:#92400e;--warn-border:#fcd34d;--code-bg:#0f172a;--code-text:#e2e8f0}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .site-header{background:var(--navy);position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold)}
+  .header-inner{max-width:900px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px}
+  .header-left{display:flex;align-items:center;gap:10px}
+  .header-logo{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:14px;color:var(--navy)}
+  .header-title{font-size:13px;font-weight:600;color:#fff}
+  .header-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px}
+  .header-back{font-size:11px;color:rgba(255,255,255,0.6);text-decoration:none;display:flex;align-items:center;gap:4px;padding:5px 10px;border:1px solid rgba(255,255,255,0.2);border-radius:99px}
+  .header-back:hover{color:#fff}
+  .header-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--gold);color:var(--navy)}
+  .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+  .lab-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3068 100%);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+  .lab-hero::after{content:'2';position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-family:'DM Serif Display',serif;font-size:120px;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none}
+  .lab-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:flex;align-items:center;gap:5px}
+  .lab-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,4vw,28px);color:#fff;margin-bottom:.5rem}
+  .lab-desc{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin-bottom:1.25rem}
+  .lab-meta{display:flex;gap:10px;flex-wrap:wrap}
+  .meta-chip{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:99px;border:1px solid rgba(255,255,255,0.1)}
+  .progress-wrap{margin-bottom:1.5rem}
+  .progress-bar{background:var(--border);border-radius:99px;height:5px;overflow:hidden;margin-bottom:4px}
+  .progress-fill{height:100%;background:var(--navy);border-radius:99px;transition:width .5s}
+  .progress-label{font-size:10px;color:var(--hint);text-align:right}
+  .section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+  .sec-head{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s}
+  .sec-head:hover{background:var(--bg)}
+  .sec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+  .sec-title{font-size:13px;font-weight:600;color:var(--text);flex:1;line-height:1.35}
+  .sec-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .sec-dur{font-size:10px;color:var(--hint);display:flex;align-items:center;gap:3px}
+  .sec-status{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .st-todo{background:#f1f5f9;color:var(--hint)}
+  .st-active{background:var(--info-bg);color:var(--info-text)}
+  .st-done{background:var(--success-bg);color:var(--success-text)}
+  .chevron{font-size:13px;color:var(--hint);transition:transform .25s;flex-shrink:0}
+  .sec-body{padding:0 16px 18px;display:none}
+  .sec-body.open{display:block}
+  .info-box{border:1px solid var(--info-border);background:var(--info-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--info-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+  .warn-box{border:1px solid var(--warn-border);background:var(--warn-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--warn-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+  .success-box{border:1px solid var(--success-border);background:var(--success-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--success-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+  .concept{background:var(--bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--muted);line-height:1.7}
+  .concept strong{color:var(--text);font-weight:600}
+  .divider{height:1px;background:var(--border);margin:14px 0}
+  .steps{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+  .step{display:flex;gap:12px;align-items:flex-start}
+  .step-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .step-body{flex:1}
+  .step-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+  .step-desc{font-size:11px;color:var(--muted);line-height:1.6}
+  .cmd-block{margin:10px 0}
+  .cmd-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px;letter-spacing:.05em;text-transform:uppercase}
+  .cmd{background:var(--code-bg);border-radius:10px 10px 0 0;padding:11px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--code-text);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;line-height:1.8}
+  .cmd.solo{border-radius:10px}
+  .cmd-text{flex:1;white-space:pre-wrap;word-break:break-all}
+  .prompt{color:#475569;user-select:none}
+  .kw{color:#7dd3fc}
+  .fl{color:#a5f3fc}
+  .pt{color:#86efac}
+  .ar{color:#fde68a}
+  .copy-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;align-self:flex-start}
+  .copy-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+  .copy-btn.copied{color:#6ee7b7;border-color:#6ee7b7}
+  .cmd-result{background:#0d1117;border:1px solid #1e293b;border-top:none;border-radius:0 0 10px 10px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:11px;color:#64748b;line-height:1.65}
+  .res-ok{color:#6ee7b7}
+  .res-info{color:#94a3b8}
+  .res-gold{color:#fde68a}
+  .arch{background:var(--code-bg);border-radius:12px;padding:1.25rem;margin:12px 0;font-family:'DM Mono',monospace;font-size:11px;line-height:2;color:#94a3b8;overflow-x:auto}
+  .nd-m{color:#7dd3fc}.nd-s{color:#86efac}.nd-x{color:#c4b5fd}.nd-l{color:#fde68a}.nd-a{color:#334155}
+  .svc-table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0}
+  .svc-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;font-weight:600;font-size:11px}
+  .svc-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--muted)}
+  .svc-table tr:last-child td{border-bottom:none}
+  .svc-table td:first-child{font-family:'DM Mono',monospace;color:var(--text);font-size:11px;font-weight:500}
+  .pb{display:inline-block;background:var(--info-bg);color:var(--info-text);font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace}
+  .quiz-block{margin:12px 0}
+  .quiz-timer{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--hint);margin-bottom:7px;background:var(--bg);border-radius:99px;padding:3px 10px;width:fit-content;border:1px solid var(--border)}
+  .quiz-q{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.55}
+  .opts{display:flex;flex-direction:column;gap:6px}
+  .opt{border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;cursor:pointer;color:var(--text);background:var(--card);text-align:left;transition:background .15s;line-height:1.45;font-family:'DM Sans',sans-serif}
+  .opt:hover{background:var(--bg)}
+  .opt.correct{border-color:var(--success-border);background:var(--success-bg);color:var(--success-text)}
+  .opt.wrong{border-color:var(--danger-border);background:var(--danger-bg);color:var(--danger-text)}
+  .fb{font-size:11px;margin-top:7px;padding:8px 11px;border-radius:8px;line-height:1.6;display:none}
+  .fb-ok{background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)}
+  .fb-ko{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger-border)}
+  .done-badge{display:none;align-items:center;gap:5px;font-size:11px;color:var(--success-text);margin-top:10px;font-weight:500}
+  .complete-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:8px 16px;border-radius:99px;border:none;background:var(--navy);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;transition:opacity .15s}
+  .complete-btn:hover{opacity:.85}
+  .final-box{display:none;margin-top:1.5rem;background:linear-gradient(135deg,var(--navy),#1a3068);border-radius:16px;padding:1.5rem;text-align:center}
+  .final-icon{font-size:36px;color:var(--gold);margin-bottom:.75rem}
+  .final-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin-bottom:.5rem}
+  .final-body{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:1.25rem}
+  .final-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:1.25rem}
+  .ftag{font-size:10px;font-weight:600;padding:4px 12px;border-radius:99px;background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.3)}
+  .site-footer{background:var(--navy-dark);padding:1rem;text-align:center;font-size:11px;color:rgba(255,255,255,0.35)}
+  .site-footer span{color:var(--gold)}
+  code{font-family:'DM Mono',monospace;background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:11px}
+  @media(max-width:600px){.container{padding:1rem 1rem 4rem}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-logo">BD</div>
+      <div>
+        <div class="header-title">Big Data for Financial Services</div>
+        <div class="header-sub">ISCAE Casablanca · 2025-2026</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a href="../index.html" class="header-back"><i class="ti ti-arrow-left"></i> Accueil</a>
+      <span class="header-badge">Lab 2 / 7</span>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="lab-hero">
+    <div class="lab-tag"><i class="ti ti-brand-github"></i> Jour 1 · Atelier pratique</div>
+    <h1 class="lab-title">Lab 2 — Cluster Hadoop sur GitHub Codespaces</h1>
+    <p class="lab-desc">Lancer un cluster Hadoop (NameNode + DataNodes + Kafka UI) en une seule commande <code style="background:rgba(255,255,255,0.1);color:#fde68a">docker-compose up -d</code>, directement dans votre navigateur. Puis manipuler HDFS et tester une application Java Hadoop. <p class="lab-desc"><b><u>GitHub</u> </b>est une plateforme de développement collaboratif qui permet de stocker et de partager du code en utilisant le système de versionnement git.</p><p class="lab-desc"><b><u> GitHub Codespaces </u> </b>est un environnement de développement intégré (IDE) dans le navigateur : il vous offre directement un terminal Linux, un éditeur VS Code et des outils comme Docker, sans aucune installation sur votre machine. </p></p>
+    <div class="lab-meta">
+      <span class="meta-chip"><i class="ti ti-clock"></i> 60 min</span>
+      <span class="meta-chip"><i class="ti ti-brand-github"></i> Codespaces</span>
+      <span class="meta-chip"><i class="ti ti-brand-docker"></i> docker-compose up</span>
+      <span class="meta-chip"><i class="ti ti-database"></i> HDFS</span>
+      <span class="meta-chip"><i class="ti ti-brand-java"></i> Hadoop API</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+    <div class="progress-label" id="prog-lbl">0 / 6 sections complétées</div>
+  </div>
+
+  <!-- S0 COMPTE GITHUB -->
+  <div class="section" id="s0">
+    <div class="sec-head" onclick="toggle('s0')">
+      <div class="sec-num" style="background:#e0e7ff;color:#3730a3">0</div>
+      <span class="sec-title">Créer un compte GitHub (si vous n'en avez pas)</span>
+      <div class="sec-right">
+        <span class="sec-dur"><i class="ti ti-clock"></i> 5 min</span>
+        <span class="sec-status st-todo" id="st0">À faire</span>
+        <i class="ti ti-chevron-down chevron" id="ch0"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b0">
+      <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><div>Si vous avez déjà un compte GitHub, passez directement à la section 1.</div></div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Aller sur github.com/signup</div><div class="step-desc">Ouvrir dans votre navigateur.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Remplir le formulaire</div><div class="step-desc">Email · Password (min 15 caractères) · Username (ex: <code>prenom-nom-iscae</code>)</div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Vérifier votre email</div><div class="step-desc">GitHub vous envoie un code de confirmation. Le copier dans la page.</div></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">✅ Compte créé — 60h/mois gratuites sur Codespaces</div><div class="step-desc">Aucune carte bancaire requise.</div></div></div>
+      </div>
+      <button class="complete-btn" onclick="markDone('s0','done0','st0');updateProgress()"><i class="ti ti-circle-check"></i> J'ai mon compte GitHub</button>
+      <div class="done-badge" id="done0"><i class="ti ti-circle-check"></i> Section complétée</div>
+    </div>
+  </div>
+
+  <!-- S1 CODESPACES -->
+  <div class="section" id="s1">
+    <div class="sec-head" onclick="toggle('s1')">
+      <div class="sec-num" style="background:#dbeafe;color:#1e3a8a">1</div>
+      <span class="sec-title">Lancer GitHub Codespaces</span>
+      <div class="sec-right">
+        <span class="sec-dur"><i class="ti ti-clock"></i> 3 min</span>
+        <span class="sec-status st-todo" id="st1">À faire</span>
+        <i class="ti ti-chevron-down chevron" id="ch1"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b1">
+      <div class="concept"><strong>GitHub Codespaces</strong> = VS Code complet dans le navigateur, avec un vrai terminal Linux et Docker préinstallé. Zéro installation sur votre machine.</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Aller sur le dépôt du cours</div><div class="step-desc"><a href="https://github.com/yasseralami/ISCAE_bigdata_labs" target="_blank" style="color:var(--info-text);font-weight:600;font-family:'DM Mono';font-size:11px">github.com/yasseralami/ISCAE_bigdata_labs</a></div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Cliquer le bouton vert <strong>"Code"</strong></div><div class="step-desc">Onglet <strong>Codespaces</strong> → <strong>"Create codespace on main"</strong></div></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Attendre 1-2 minutes</div><div class="step-desc">VS Code s'ouvre dans le navigateur avec un terminal en bas.</div></div></div>
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Vérification Docker</div>
+        <div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker</span> <span class="fl">version</span></div><button class="copy-btn" onclick="copyCmd(this,'docker version')">Copier</button></div>
+      </div>
+      <div class="success-box"><i class="ti ti-circle-check" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><div>Si Docker affiche sa version → vous êtes prêt. Passer à la section 2.</div></div>
+      <button class="complete-btn" onclick="markDone('s1','done1','st1');updateProgress()"><i class="ti ti-circle-check"></i> Codespace lancé</button>
+      <div class="done-badge" id="done1"><i class="ti ti-circle-check"></i> Section complétée</div>
+    </div>
+  </div>
+
+  <!-- S2 DOCKER COMPOSE -->
+  <div class="section" id="s2">
+    <div class="sec-head" onclick="toggle('s2')">
+      <div class="sec-num" style="background:#dbeafe;color:#1e3a8a">2</div>
+      <span class="sec-title">Lancer tout le cluster — une seule commande</span>
+      <div class="sec-right">
+        <span class="sec-dur"><i class="ti ti-clock"></i> 8 min</span>
+        <span class="sec-status st-todo" id="st2">À faire</span>
+        <i class="ti ti-chevron-down chevron" id="ch2"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b2">
+      <div class="concept"><strong>Le fichier docker-compose.yml</strong> décrit tout le cluster. Une seule commande lance tous les services — réseau, volumes et dépendances inclus. C'est le principe d'Infrastructure as Code.</div>
+      <div class="arch">
+<span class="nd-l">Cluster — lancé par docker-compose up -d</span><br><br>
+<span class="nd-m">┌──────────────────────────────────────────────┐</span><br>
+<span class="nd-m">│  cluster-master  (hostname: hadoop-master)   │ </span><span class="nd-l">← NameNode + YARN + Kafka + Zookeeper</span><br>
+<span class="nd-m">│  ports: 9870 · 8088 · 9092 · 2181 · 7077    │</span><br>
+<span class="nd-m">│  volume: ./assets/ → /shared_volume          │</span><br>
+<span class="nd-m">└───────────────┬──────────────────────────────┘</span><br>
+<span class="nd-a">                │  réseau Docker "hadoop"</span><br>
+<span class="nd-a">       ┌────────┴────────┐</span><br>
+<span class="nd-s">       ▼                 ▼</span><br>
+<span class="nd-s">┌─────────────┐   ┌─────────────┐</span><br>
+<span class="nd-s">│ cluster-    │   │ cluster-    │ </span><span class="nd-l">← DataNodes</span><br>
+<span class="nd-s">│ slave1      │   │ slave2      │</span><br>
+<span class="nd-s">└─────────────┘   └─────────────┘</span><br><br>
+<span class="nd-x">┌─────────────┐</span><br>
+<span class="nd-x">│  kafka-ui   │ </span><span class="nd-l">← Interface web Kafka (port 8081)</span><br>
+<span class="nd-x">└─────────────┘</span>
+      </div>
+
+      <table class="svc-table">
+        <tr><th>Interface web</th><th>Port</th><th>Description</th></tr>
+        <tr><td>NameNode Web UI</td><td><span class="pb">9870</span></td><td>État HDFS, fichiers, DataNodes</td></tr>
+        <tr><td>ResourceManager</td><td><span class="pb">8088</span></td><td>YARN — suivi des jobs</td></tr>
+        <tr><td>JobHistory</td><td><span class="pb">19888</span></td><td>Historique MapReduce</td></tr>
+        <tr><td>Spark UI</td><td><span class="pb">8080</span></td><td>Interface Spark Master</td></tr>
+        <tr><td>Kafka UI</td><td><span class="pb">8081</span></td><td>Topics, messages, consumers Kafka</td></tr>
+       </table>
+
+      <div class="divider"></div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 1 — Créer le dossier partagé</div>
+        <div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">mkdir</span> <span class="fl">-p</span> <span class="pt">assets</span></div><button class="copy-btn" onclick="copyCmd(this,'mkdir -p assets')">Copier</button></div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 2 — Lancer TOUT le cluster</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker-compose</span> <span class="fl">up -d</span></div><button class="copy-btn" onclick="copyCmd(this,'docker-compose up -d')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-info">Pulling yassern1/hadoop-spark-jupyter:1.0.3 ...</span><br>
+          <span class="res-info">Pulling provectuslabs/kafka-ui ...</span><br>
+          <span class="res-info">Creating cluster-master ... </span><span class="res-ok">done</span><br>
+          <span class="res-info">Creating cluster-slave1 ... </span><span class="res-ok">done</span><br>
+          <span class="res-info">Creating cluster-slave2 ... </span><span class="res-ok">done</span><br>
+          <span class="res-info">Creating kafka-ui       ... </span><span class="res-ok">done</span><br>
+          <span class="res-info">Creating hue            ... </span><span class="res-ok">done</span><br>
+          <span class="res-gold">⏳ Premier lancement : ~3-5 min (téléchargement des images)</span>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 3 — Vérifier les conteneurs</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker</span> <span class="fl">ps</span></div><button class="copy-btn" onclick="copyCmd(this,'docker ps')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-info">CONTAINER ID   IMAGE                        STATUS    NAMES</span><br>
+          <span class="res-ok">xxx   yassern1/hadoop-spark...    Up        cluster-master</span><br>
+          <span class="res-ok">xxx   yassern1/hadoop-spark...    Up        cluster-slave1</span><br>
+          <span class="res-ok">xxx   yassern1/hadoop-spark...    Up        cluster-slave2</span><br>
+          <span class="res-ok">xxx   provectuslabs/kafka-ui       Up        kafka-ui</span>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 4 — Démarrer Hadoop dans le master</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker</span> <span class="fl">exec</span> <span class="fl">-it</span> <span class="ar">cluster-master</span> <span class="kw">./start-hadoop.sh</span></div><button class="copy-btn" onclick="copyCmd(this,'docker exec -it cluster-master ./start-hadoop.sh')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-info">Starting namenodes on [hadoop-master]</span><br>
+          <span class="res-info">Starting datanodes</span><br>
+          <span class="res-ok">✅ Hadoop et YARN démarrés</span>
+        </div>
+      </div>
+
+      <div class="warn-box"><i class="ti ti-alert-triangle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><div><strong>Accéder aux interfaces web dans Codespaces :</strong> onglet <strong>Ports</strong> (en bas) → icône 🌐 à côté du port → l'interface s'ouvre dans un nouvel onglet.</div></div>
+
+      <div class="divider"></div>
+      <div class="quiz-block">
+        <div class="quiz-timer"><i class="ti ti-stopwatch"></i> Question de validation</div>
+        <div class="quiz-q">Quelle est la différence entre lancer les conteneurs un par un (<code>docker run</code>) et utiliser <code>docker-compose up -d</code> ?</div>
+        <div class="opts" id="q2">
+          <button class="opt" onclick="answer('q2',0,2)">Il n'y a aucune différence — c'est la même chose</button>
+          <button class="opt" onclick="answer('q2',1,2)">docker-compose est plus lent car il télécharge plus d'images</button>
+          <button class="opt" onclick="answer('q2',2,2)">docker-compose lit un fichier de configuration et orchestre tous les services en une commande — réseau, volumes et dépendances inclus</button>
+        </div>
+        <div class="fb fb-ok" id="q2-ok">Exactement. Le fichier <code>docker-compose.yml</code> décrit l'ensemble de l'infrastructure. Une seule commande reproduit l'environnement de manière identique — c'est l'Infrastructure as Code.</div>
+        <div class="fb fb-ko" id="q2-ko">docker-compose lit le fichier <code>docker-compose.yml</code> et orchestre tous les services automatiquement — réseau créé, volumes montés, dépendances respectées. C'est l'Infrastructure as Code.</div>
+      </div>
+      <div class="done-badge" id="done2"><i class="ti ti-circle-check"></i> Section complétée</div>
+    </div>
+  </div>
+
+  <!-- S3 COMMANDES HDFS -->
+  <div class="section" id="s3">
+    <div class="sec-head" onclick="toggle('s3')">
+      <div class="sec-num" style="background:#dcfce7;color:#166534">3</div>
+      <span class="sec-title">Commandes HDFS — Manipulation des fichiers</span>
+      <div class="sec-right">
+        <span class="sec-dur"><i class="ti ti-clock"></i> 25 min</span>
+        <span class="sec-status st-todo" id="st3">À faire</span>
+        <i class="ti ti-chevron-down chevron" id="ch3"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b3">
+      <div class="info-box"><i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><div>Entrer dans le conteneur master pour exécuter toutes les commandes HDFS :</div></div>
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Entrer dans le master</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker</span> <span class="fl">exec -it</span> <span class="ar">cluster-master</span> <span class="kw">bash</span></div><button class="copy-btn" onclick="copyCmd(this,'docker exec -it cluster-master bash')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">root@hadoop-master:/#  ← vous êtes dans le conteneur ✅</span></div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 1. Créer l'arborescence utilisateur</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hadoop</span> <span class="fl">fs -mkdir -p</span> <span class="pt">/user/root</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop fs -mkdir -p /user/root')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 2. Créer le dossier input</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-mkdir</span> <span class="pt">input</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -mkdir input')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 3. Lister les fichiers</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-ls</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -ls')">Copier</button></div><div class="cmd-result"><span class="res-ok">Found 1 items</span><br><span class="res-info">drwxr-xr-x   - root root   0  /user/root/input</span></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 4. Lister récursivement avec taille lisible</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-ls -R -h</span> <span class="pt">./</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -ls -R -h ./')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 5. Copier purchases.txt vers HDFS</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-put</span> <span class="pt">/shared_volume/purchases.txt</span> <span class="pt">.</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -put /shared_volume/purchases.txt .')">Copier</button></div><div class="cmd-result"><span class="res-ok">✅ Fichier copié vers HDFS</span></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 6. Vérifier — noter le facteur de réplication</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-ls -R</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -ls -R')">Copier</button></div><div class="cmd-result"><span class="res-ok">-rw-r--r--   <span style="color:#fde68a;font-weight:700">3</span> root root   482 purchases.txt</span><br><span class="res-info">↑ <strong>3</strong> = facteur de réplication (3 copies sur 3 nœuds)</span></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 7. Afficher le contenu</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-cat</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -cat purchases.txt')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 8. Afficher la fin du fichier</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-tail</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -tail purchases.txt')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 9. Supprimer le fichier</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-rm</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -rm purchases.txt')">Copier</button></div><div class="cmd-result"><span class="res-ok">✅ Deleted purchases.txt</span></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 10. Remettre le fichier (copyFromLocal)</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-copyFromLocal</span> <span class="pt">/shared_volume/purchases.txt</span> <span class="pt">./input</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -copyFromLocal /shared_volume/purchases.txt ./input')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 11. Changer les droits</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-chmod</span> <span class="ar">go+w</span> <span class="pt">./input/purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -chmod go+w ./input/purchases.txt')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 12. Déplacer un fichier</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-mv</span> <span class="pt">/user/root/input/purchases.txt</span> <span class="pt">/user/root/</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -mv /user/root/input/purchases.txt /user/root/')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 13. Télécharger depuis HDFS</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-get</span> <span class="pt">./input/purchases.txt</span> <span class="pt">/shared_volume/achat.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -get ./input/purchases.txt /shared_volume/achat.txt')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 14. Copier dans un autre emplacement HDFS</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-cp</span> <span class="pt">./input/purchases.txt</span> <span class="pt">./purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -cp ./input/purchases.txt ./purchases.txt')">Copier</button></div></div>
+
+      <div class="divider"></div>
+      <p style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Télécharger alice.txt depuis Internet</p>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 15. Créer le dossier web_input</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-mkdir -p</span> <span class="pt">web_input</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -mkdir -p web_input')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 16. Télécharger alice.txt</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">wget</span> <span class="ar">http://www.textfiles.com/etext/FICTION/alice.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'wget http://www.textfiles.com/etext/FICTION/alice.txt')">Copier</button></div><div class="cmd-result"><span class="res-ok">✅ alice.txt téléchargé</span></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 17. Copier vers le volume partagé</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">cp</span> <span class="pt">alice.txt</span> <span class="pt">/shared_volume/</span></div><button class="copy-btn" onclick="copyCmd(this,'cp alice.txt /shared_volume/')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 18. Ingérer dans HDFS</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-put</span> <span class="pt">/shared_volume/alice.txt</span> <span class="pt">web_input</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -put /shared_volume/alice.txt web_input')">Copier</button></div></div>
+
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> 19. Vérifier</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">hdfs dfs</span> <span class="fl">-ls</span> <span class="pt">web_input</span></div><button class="copy-btn" onclick="copyCmd(this,'hdfs dfs -ls web_input')">Copier</button></div><div class="cmd-result"><span class="res-ok">Found 1 items</span><br><span class="res-info">-rw-r--r--   3 root root   152K   web_input/alice.txt</span></div></div>
+
+      <div class="divider"></div>
+      <div class="quiz-block">
+        <div class="quiz-timer"><i class="ti ti-stopwatch"></i> Question de validation</div>
+        <div class="quiz-q">Dans le résultat de <code>hdfs dfs -ls -R</code>, vous voyez le chiffre <strong>3</strong> devant purchases.txt. Que signifie-t-il ?</div>
+        <div class="opts" id="q3">
+          <button class="opt" onclick="answer('q3',0,1)">C'est la version du fichier</button>
+          <button class="opt" onclick="answer('q3',1,1)">C'est le facteur de réplication — le fichier existe en 3 copies sur 3 DataNodes différents</button>
+          <button class="opt" onclick="answer('q3',2,1)">C'est la taille du fichier en Ko</button>
+        </div>
+        <div class="fb fb-ok" id="q3-ok">Correct. Le facteur de réplication par défaut dans HDFS est 3. Si un DataNode tombe, les données restent disponibles sur les 2 autres — c'est la tolérance aux pannes.</div>
+        <div class="fb fb-ko" id="q3-ko">C'est le facteur de réplication. HDFS réplique automatiquement chaque fichier sur 3 nœuds. Si 1 nœud tombe, les données existent encore sur les 2 autres.</div>
+      </div>
+      <div class="done-badge" id="done3"><i class="ti ti-circle-check"></i> Section complétée</div>
+    </div>
+  </div>
+
+  <!-- ========== NOUVEAU : S4 – Tester HDFS avec l'application Java ========== -->
+  <div class="section" id="s4">
+    <div class="sec-head" onclick="toggle('s4')">
+      <div class="sec-num" style="background:#fef3c7;color:#92400e">4</div>
+      <span class="sec-title">Tester HDFS avec l'application Java (Hadoop API)</span>
+      <div class="sec-right">
+        <span class="sec-dur"><i class="ti ti-clock"></i> 15 min</span>
+        <span class="sec-status st-todo" id="st4">À faire</span>
+        <i class="ti ti-chevron-down chevron" id="ch4"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b4">
+      <div class="info-box"><i class="ti ti-brand-java" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><div>Le JAR <code>hadoop-hdfs-app.jar</code> contient une application Java qui utilise l'API Hadoop <code>FileSystem</code> pour interagir avec HDFS. Il est déjà présent dans le conteneur master (dans <code>/shared_volume/</code> ou <code>/root</code>). Si nécessaire, vous pouvez le copier depuis <code>/shared_volume/hadoop-hdfs-app.jar</code>.</div></div>
+
+      <!-- Opération 1 : status -->
+      <div class="concept" style="margin-top:12px">
+        <strong>📁 Opération 1 — status</strong> — Vérifie l'existence et les métadonnées d'un fichier dans HDFS.<br>
+        <em>En Java :</em> <code>FileSystem.get(conf).getFileStatus(path)</code> → récupère la taille, les permissions, le propriétaire, le bloc de réplication, etc.
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">status</span> <span class="pt">/user/root</span> <span class="pt">alice.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar status /user/root alice.txt')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-ok">✅ File found: /user/root/alice.txt</span><br>
+          <span class="res-info">Owner: root, Group: root, Size: 152345 bytes, Replication: 3, Permission: rw-r--r--, Modification time: 2025-03-27 10:23:45</span>
+        </div>
+      </div>
+
+      <!-- Opération 2 : info -->
+      <div class="concept">
+        <strong>📋 Opération 2 — info</strong> — Affiche les block locations (sur quels DataNodes se trouve chaque bloc).<br>
+        <em>En Java :</em> <code>FileSystem.get(conf).getFileBlockLocations(fileStatus, 0, length)</code> → liste des hôtes pour chaque bloc.
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">info</span> <span class="pt">/user/root</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar info /user/root purchases.txt')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-info">Block 1: 192.168.96.2:50010 (cluster-slave1), 192.168.96.3:50010 (cluster-slave2), 192.168.96.4:50010 (cluster-master)</span><br>
+          <span class="res-info">Block 2: 192.168.96.3:50010 (cluster-slave2), 192.168.96.2:50010 (cluster-slave1), 192.168.96.4:50010 (cluster-master)</span><br>
+          <span class="res-ok">Total blocks: 2 | Replication factor: 3</span>
+        </div>
+      </div>
+
+      <!-- Opération 3 : read -->
+      <div class="concept">
+        <strong>📖 Opération 3 — read</strong> — Lit et affiche les 1 024 premiers octets du fichier.<br>
+        <em>En Java :</em> <code>FileSystem.open(path)</code> → <code>FSDataInputStream</code>, lecture d'un buffer.
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">read</span> <span class="pt">/user/root</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar read /user/root purchases.txt')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-info">--- Début du fichier ---</span><br>
+          date,product,amount,category<br>
+          2025-03-01,Laptop,1200,Electronics<br>
+          2025-03-02,Book,25,Education<br>
+          2025-03-03,Headphones,80,Electronics<br>
+          <span class="res-info">... (seulement les 1024 premiers octets sont affichés)</span>
+        </div>
+      </div>
+
+      <!-- Opération 4 : write -->
+      <div class="concept">
+        <strong>✍️ Opération 4 — write</strong> — Crée un nouveau fichier texte dans HDFS et écrit une ligne dedans.<br>
+        <em>En Java :</em> <code>FileSystem.create(path)</code> → <code>FSDataOutputStream</code>, écriture d'une chaîne.
+      </div>
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">write</span> <span class="pt">/user/root</span> <span class="pt">hello.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar write /user/root hello.txt')">Copier</button></div>
+        <div class="cmd-result">
+          <span class="res-ok">✅ File created: /user/root/hello.txt</span><br>
+          <span class="res-info">Content written: "Hello from Hadoop Java API !"</span>
+        </div>
+      </div>
+
+      <div class="info-box"><i class="ti ti-checkbox" style="font-size:15px;flex-shrink:0;margin-top:1px"></i><div>Après avoir exécuté <code>write</code>, vous pouvez vérifier avec <code>hdfs dfs -cat /user/root/hello.txt</code> que le fichier contient bien le message.</div></div>
+
+      <div class="divider"></div>
+      <div class="quiz-block">
+        <div class="quiz-timer"><i class="ti ti-stopwatch"></i> Question de validation</div>
+        <div class="quiz-q">Dans l'API Hadoop Java, quelle classe est utilisée pour ouvrir un fichier en lecture sur HDFS ?</div>
+        <div class="opts" id="q4">
+          <button class="opt" onclick="answer('q4',0,2)">FileReader</button>
+          <button class="opt" onclick="answer('q4',1,2)">FileSystem.get(conf).open(path)</button>
+          <button class="opt" onclick="answer('q4',2,2)">new FileInputStream(path)</button>
+        </div>
+        <div class="fb fb-ok" id="q4-ok">Bravo ! <code>FileSystem.get(conf).open(path)</code> retourne un <code>FSDataInputStream</code> qui permet de lire des fichiers HDFS de manière distribuée.</div>
+        <div class="fb fb-ko" id="q4-ko">La bonne réponse est <code>FileSystem.get(conf).open(path)</code>. L'API Hadoop utilise <code>FileSystem</code> comme point d'entrée, pas les classes standard de Java I/O.</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s4','done4','st4');updateProgress()"><i class="ti ti-circle-check"></i> Application Java testée</button>
+      <div class="done-badge" id="done4"><i class="ti ti-circle-check"></i> Section complétée</div>
+    </div>
+  </div>
+
+  <!-- S5 (anciennement S4) ARRÊT & SYNTHÈSE -->
+  <div class="section" id="s5">
+    <div class="sec-head" onclick="toggle('s5')">
+      <div class="sec-num" style="background:#f1f5f9;color:#64748b">5</div>
+      <span class="sec-title">Arrêter le cluster & synthèse</span>
+      <div class="sec-right">
+        <span class="sec-dur"><i class="ti ti-clock"></i> 3 min</span>
+        <span class="sec-status st-todo" id="st5">À faire</span>
+        <i class="ti ti-chevron-down chevron" id="ch5"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b5">
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> Sortir du conteneur</div><div class="cmd solo"><div class="cmd-text"><span class="prompt">root@hadoop-master:/# </span><span class="kw">exit</span></div><button class="copy-btn" onclick="copyCmd(this,'exit')">Copier</button></div></div>
+      <div class="cmd-block"><div class="cmd-label"><i class="ti ti-terminal"></i> Arrêter tout le cluster</div><div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker-compose</span> <span class="fl">stop</span></div><button class="copy-btn" onclick="copyCmd(this,'docker-compose stop')">Copier</button></div><div class="cmd-result"><span class="res-ok">✅ Tous les conteneurs arrêtés</span></div></div>
+      <div class="divider"></div>
+      <div class="concept">
+        <strong>Ce que vous avez appris :</strong><br><br>
+        ✅ <strong>docker-compose up -d</strong> — lancer tout le cluster en une commande<br>
+        ✅ <strong>hdfs dfs -mkdir / -put / -copyFromLocal</strong> — ingérer des données<br>
+        ✅ <strong>hdfs dfs -ls -R -h</strong> — explorer l'arborescence HDFS<br>
+        ✅ <strong>hdfs dfs -cat / -tail</strong> — lire les fichiers<br>
+        ✅ <strong>hdfs dfs -rm / -mv / -cp / -get / -chmod</strong> — gérer les fichiers<br>
+        ✅ <strong>wget + put</strong> — pipeline d'ingestion depuis Internet<br>
+        ✅ <strong>Application Java Hadoop API</strong> — <code>FileSystem.get()</code>, <code>open()</code>, <code>create()</code>, <code>getFileBlockLocations()</code><br>
+        ✅ <strong>docker-compose down</strong> — arrêter proprement le cluster
+      </div>
+      <button class="complete-btn" onclick="markDone('s5','done5','st5');updateProgress()"><i class="ti ti-circle-check"></i> Lab 2 terminé !</button>
+      <div class="done-badge" id="done5"><i class="ti ti-circle-check"></i> Lab 2 terminé</div>
+    </div>
+  </div>
+
+  <div class="final-box" id="final">
+    <div class="final-icon"><i class="ti ti-circle-check"></i></div>
+    <div class="final-title">Lab 2 complété !</div>
+    <div class="final-body">Vous avez opéré un vrai cluster Hadoop distribué, manipulé HDFS en ligne de commande, et exécuté une application Java utilisant l'API Hadoop — le tout directement dans votre navigateur.<br>Prochaine étape : Pipeline Kafka streaming.</div>
+    <div class="final-tags">
+      <span class="ftag">docker-compose</span>
+      <span class="ftag">HDFS</span>
+      <span class="ftag">Réplication ×3</span>
+      <span class="ftag">Kafka UI</span>
+      <span class="ftag">Hadoop API</span>
+    </div>
+    <a href="lab3.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--navy);font-weight:600;font-size:12px;padding:10px 20px;border-radius:99px;text-decoration:none">
+      Lab 3 — Pipeline Kafka <i class="ti ti-arrow-right"></i>
+    </a>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  ISCAE Casablanca · Master Finance Digitale · <span>Big Data for Financial Services</span> · 2025-2026
+</footer>
+
+<script>
+  const done={s0:false,s1:false,s2:false,s3:false,s4:false,s5:false};
+  const total=6;
+  function toggle(id){
+    const n=id.slice(1);
+    const b=document.getElementById('b'+n);
+    const ch=document.getElementById('ch'+n);
+    const st=document.getElementById('st'+n);
+    const open=b.classList.contains('open');
+    b.classList.toggle('open',!open);
+    ch.style.transform=open?'':'rotate(180deg)';
+    if(!open && st.textContent==='À faire'){
+      st.textContent='En cours';
+      st.className='sec-status st-active';
+    }
+  }
+  function answer(qid,idx,correct){
+    const c=document.getElementById(qid);
+    if(c.dataset.answered) return;
+    c.dataset.answered='1';
+    c.querySelectorAll('.opt').forEach((b,i)=>{
+      if(i===correct) b.classList.add('correct');
+      else if(i===idx && idx!==correct) b.classList.add('wrong');
+      b.style.pointerEvents='none';
+    });
+    document.getElementById(qid+(idx===correct?'-ok':'-ko')).style.display='block';
+    const map={q2:'s2',q3:'s3',q4:'s4'};
+    if(map[qid]) markDone(map[qid],'done'+map[qid].slice(1),'st'+map[qid].slice(1));
+    updateProgress();
+  }
+  function markDone(sid,doneid,stid){
+    if(done[sid]) return;
+    done[sid]=true;
+    const d=document.getElementById(doneid);
+    if(d) d.style.display='flex';
+    const st=document.getElementById(stid);
+    if(st){
+      st.textContent='Complété';
+      st.className='sec-status st-done';
+    }
+  }
+  function updateProgress(){
+    const n=Object.values(done).filter(Boolean).length;
+    document.getElementById('prog').style.width=(n/total*100)+'%';
+    document.getElementById('prog-lbl').textContent=n+' / '+total+' sections complétées';
+    if(n===total) document.getElementById('final').style.display='block';
+  }
+  function copyCmd(btn,text){
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent='Copié !';
+      btn.classList.add('copied');
+      setTimeout(()=>{
+        btn.textContent='Copier';
+        btn.classList.remove('copied');
+      },2000);
+    });
+  }
+</script>
+</body>
+</html>

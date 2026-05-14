@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 1 — Big Data pour la Finance | ISCAE Casablanca</title>
+<title>Lab 1 — Big Data pour la Finance | ISCE Casablanca</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -803,10 +803,10 @@ Tour de table rapide : chaque participant dit en une phrase ce qu'il retient. Pu
     });
     const ok = idx === correct;
     
-    // ✅ DÉLAI DE 3 SECONDES avant d'afficher le feedback
+    // ✅ DÉLAI DE 10 SECONDES avant d'afficher le feedback
     setTimeout(() => {
       document.getElementById(qid + (ok ? '-ok' : '-ko')).style.display = 'block';
-    }, 3000);
+    }, 10000);
     
     const map = { q1:'s1', q2:'s2', q3:'s3', q4:'s4' };
     if (map[qid]) markDone(map[qid], 'done' + map[qid].slice(1), 'st' + map[qid].slice(1));

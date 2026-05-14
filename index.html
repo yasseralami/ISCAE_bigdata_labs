@@ -430,7 +430,7 @@
 
   <div class="protocol">
     <i class="ti ti-info-circle"></i>
-    <div><strong>Comment utiliser ce lab :</strong> ouvrez chaque section dans l'ordre · lisez le contenu · répondez individuellement aux questions · les sections 5 et 6 (micro-lab) se font en bin[...]
+    <div><strong>Comment utiliser ce lab :</strong> ouvrez chaque section dans l'ordre · lisez le contenu · répondez individuellement aux questions · les sections 5 et 6 (micro-lab) se font en binômes, 20 min chrono · révélez les corrections après discussion.</div>
   </div>
 
   <div class="progress-wrap">
@@ -450,31 +450,31 @@
       </div>
     </div>
     <div class="sec-body" id="b1">
-Commencer par demander : "Qui a déjà été bloqué par une requête SQL trop lente sur un gros volume ?" — créer l'ancrage avant d'expliquer. Insister sur le fait que le problème est physique, p[...]
+Commencer par demander : "Qui a déjà été bloqué par une requête SQL trop lente sur un gros volume ?" — créer l'ancrage avant d'expliquer. Insister sur le fait que le problème est physique, pas logiciel.
       </div>
       <div class="concept">
-        <strong>Le point de départ :</strong> une base relationnelle classique fonctionne très bien jusqu'à quelques dizaines de Go. Au-delà, les requêtes ralentissent, les jointures explosent, e[...]
+        <strong>Le point de départ :</strong> une base relationnelle classique fonctionne très bien jusqu'à quelques dizaines de Go. Au-delà, les requêtes ralentissent, les jointures explosent, et le serveur atteint ses limites physiques. Visa traite 65 milliards de transactions par an — ces volumes ne rentrent plus dans une seule machine.
       </div>
       <div class="analogy">
-        <strong>Analogie :</strong> un seul caissier un samedi après-midi — compétent, mais file infinie. La solution n'est pas un caissier plus rapide, c'est <strong>d'ouvrir plusieurs caisses en[...]
+        <strong>Analogie :</strong> un seul caissier un samedi après-midi — compétent, mais file infinie. La solution n'est pas un caissier plus rapide, c'est <strong>d'ouvrir plusieurs caisses en parallèle</strong>. C'est le principe du Big Data : distribuer le travail sur plusieurs machines.
       </div>
       <div class="grid2">
         <div class="grid-card"><div class="gc-name" style="color:#1e3a8a">Stockage</div><div class="gc-desc">Répartir les données sur N machines. 1 Po = 1 000 disques de 1 To.</div></div>
-        <div class="grid-card"><div class="gc-name" style="color:#065f46">Traitement parallèle</div><div class="gc-desc">100 M lignes sur 1 machine = heures. Sur 100 machines = minutes.</div></d[...]
-        <div class="grid-card"><div class="gc-name" style="color:#92400e">Vélocité</div><div class="gc-desc">Fraude détectée en &lt; 2 sec. Une BD classique ne suit pas un flux continu.</div>[...]
-        <div class="grid-card"><div class="gc-name" style="color:#4c1d95">Variété</div><div class="gc-desc">Formulaires + PDF + logs + JSON — les SGBDR ne gèrent pas tout cela nativement.</d[...]
+        <div class="grid-card"><div class="gc-name" style="color:#065f46">Traitement parallèle</div><div class="gc-desc">100 M lignes sur 1 machine = heures. Sur 100 machines = minutes.</div></div>
+        <div class="grid-card"><div class="gc-name" style="color:#92400e">Vélocité</div><div class="gc-desc">Fraude détectée en &lt; 2 sec. Une BD classique ne suit pas un flux continu.</div></div>
+        <div class="grid-card"><div class="gc-name" style="color:#4c1d95">Variété</div><div class="gc-desc">Formulaires + PDF + logs + JSON — les SGBDR ne gèrent pas tout cela nativement.</div></div>
       </div>
       <div class="divider"></div>
       <div class="quiz-block">
         <div class="quiz-timer"><i class="ti ti-stopwatch"></i> 3 min individuel · puis discussion collective</div>
-        <div class="quiz-q">Un assureur veut analyser 5 ans d'historique de sinistres (50 millions de dossiers) pour recalibrer ses modèles de risque. Quelle est la vraie limite d'une base SQL classi[...]
+        <div class="quiz-q">Un assureur veut analyser 5 ans d'historique de sinistres (50 millions de dossiers) pour recalibrer ses modèles de risque. Quelle est la vraie limite d'une base SQL classique ici ?</div>
         <div class="opts" id="q1">
           <button class="opt" onclick="answer('q1',0,1)">Le langage SQL n'est pas adapté à l'analyse de risque</button>
           <button class="opt" onclick="answer('q1',1,1)">La capacité de stockage et de traitement d'une seule machine est insuffisante à cette échelle</button>
           <button class="opt" onclick="answer('q1',2,1)">Les bases SQL ne supportent pas les données d'assurance</button>
         </div>
-        <div class="fb fb-ok" id="q1-ok"><i class="ti ti-circle-check"></i> Exactement. Le problème est physique, pas logiciel. SQL peut parfaitement décrire la requête — c'est l'exécution sur u[...]
-        <div class="fb fb-ko" id="q1-ko"><i class="ti ti-x"></i> SQL est tout à fait capable d'analyser des données de risque. Le vrai obstacle est physique : une seule machine ne peut pas traiter 5[...]
+        <div class="fb fb-ok" id="q1-ok"><i class="ti ti-circle-check"></i> Exactement. Le problème est physique, pas logiciel. SQL peut parfaitement décrire la requête — c'est l'exécution sur une seule machine qui devient impossible. C'est précisément ce que le Big Data résout en distribuant le calcul.</div>
+        <div class="fb fb-ko" id="q1-ko"><i class="ti ti-x"></i> SQL est tout à fait capable d'analyser des données de risque. Le vrai obstacle est physique : une seule machine ne peut pas traiter 50 millions de dossiers dans un délai raisonnable. C'est la scalabilité que le Big Data adresse.</div>
       </div>
       <div class="done-badge" id="done1"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
@@ -495,11 +495,11 @@ Commencer par demander : "Qui a déjà été bloqué par une requête SQL trop l
 Présenter les 5V comme un outil de diagnostic, pas comme une liste à mémoriser. Demander aux participants de trouver eux-mêmes l'exemple finance pour chaque V avant de le révéler.
       </div>
       <div class="v-rows">
-        <div class="v-row"><div class="v-name" style="color:#1e3a8a">Volume</div><div class="v-content"><div class="v-text">Quantité dépassant la capacité d'une machine.</div><div class="v-fin[...]
-        <div class="v-row"><div class="v-name" style="color:#065f46">Vélocité</div><div class="v-content"><div class="v-text">Données traitées en continu, pas en batch.</div><div class="v-fin[...]
-        <div class="v-row"><div class="v-name" style="color:#92400e">Variété</div><div class="v-content"><div class="v-text">Sources hétérogènes, formats mixtes.</div><div class="v-fin">Doss[...]
-        <div class="v-row"><div class="v-name" style="color:#4c1d95">Véracité</div><div class="v-content"><div class="v-text">Qualité et fiabilité non garanties.</div><div class="v-fin">Repor[...]
-        <div class="v-row"><div class="v-name" style="color:#78350f">Valeur</div><div class="v-content"><div class="v-text">Extraire une valeur métier actionnable.</div><div class="v-fin">Scorin[...]
+        <div class="v-row"><div class="v-name" style="color:#1e3a8a">Volume</div><div class="v-content"><div class="v-text">Quantité dépassant la capacité d'une machine.</div><div class="v-fin">Visa : 100 Po stockés · PayPal : 15 Mds tx/an</div></div></div>
+        <div class="v-row"><div class="v-name" style="color:#065f46">Vélocité</div><div class="v-content"><div class="v-text">Données traitées en continu, pas en batch.</div><div class="v-fin">Alerte fraude &lt; 2 sec · Trading HFT &lt; 1 ms</div></div></div>
+        <div class="v-row"><div class="v-name" style="color:#92400e">Variété</div><div class="v-content"><div class="v-text">Sources hétérogènes, formats mixtes.</div><div class="v-fin">Dossier client : formulaires + PDF + logs + emails</div></div></div>
+        <div class="v-row"><div class="v-name" style="color:#4c1d95">Véracité</div><div class="v-content"><div class="v-text">Qualité et fiabilité non garanties.</div><div class="v-fin">Reporting BCE : données certifiées obligatoires</div></div></div>
+        <div class="v-row"><div class="v-name" style="color:#78350f">Valeur</div><div class="v-content"><div class="v-text">Extraire une valeur métier actionnable.</div><div class="v-fin">Scoring crédit : −30% de défauts via ML</div></div></div>
       </div>
       <div class="divider"></div>
       <div class="quiz-block">
@@ -510,8 +510,8 @@ Présenter les 5V comme un outil de diagnostic, pas comme une liste à mémorise
           <button class="opt" onclick="answer('q2',1,1)">Vélocité + Variété + Valeur — flux continu, données hétérogènes, décision tarifaire</button>
           <button class="opt" onclick="answer('q2',2,1)">Véracité uniquement — on ne peut pas faire confiance aux capteurs GPS</button>
         </div>
-        <div class="fb fb-ok" id="q2-ok"><i class="ti ti-circle-check"></i> Très bien. Vélocité (flux temps réel véhicule), Variété (GPS + accéléromètre + vidéo), Valeur (ajustement de prim[...]
-        <div class="fb fb-ko" id="q2-ko"><i class="ti ti-x"></i> Pensez multi-dimensionnel : données hétérogènes (Variété), flux continu depuis le véhicule (Vélocité), décision de tarif[...]
+        <div class="fb fb-ok" id="q2-ok"><i class="ti ti-circle-check"></i> Très bien. Vélocité (flux temps réel véhicule), Variété (GPS + accéléromètre + vidéo), Valeur (ajustement de prime = décision business directe). Le Volume est présent mais secondaire ici.</div>
+        <div class="fb fb-ko" id="q2-ko"><i class="ti ti-x"></i> Pensez multi-dimensionnel : données hétérogènes (Variété), flux continu depuis le véhicule (Vélocité), décision de tarification (Valeur). Le Volume est présent mais n'est pas le V dominant dans ce contexte.</div>
       </div>
       <div class="done-badge" id="done2"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
@@ -532,10 +532,10 @@ Présenter les 5V comme un outil de diagnostic, pas comme une liste à mémorise
 Poser la question d'abord : "Comment vous y prendriez-vous pour calculer le solde de 10 millions de comptes le plus vite possible ?" — 1 min de réflexion avant de donner la réponse.
       </div>
       <div class="concept">
-        <strong>L'idée centrale :</strong> au lieu d'amener les données vers le calcul, on amène le calcul vers les données. On divise un problème en sous-problèmes traités en parallèle sur le[...]
+        <strong>L'idée centrale :</strong> au lieu d'amener les données vers le calcul, on amène le calcul vers les données. On divise un problème en sous-problèmes traités en parallèle sur les machines où les données résident déjà.
       </div>
       <div class="analogy">
-        <strong>Analogie finance :</strong> calculer le solde de 10 millions de comptes. Option A — un seul analyste, des semaines. Option B — 1 000 groupes de 10 000 comptes, chaque analyste calc[...]
+        <strong>Analogie finance :</strong> calculer le solde de 10 millions de comptes. Option A — un seul analyste, des semaines. Option B — 1 000 groupes de 10 000 comptes, chaque analyste calcule son sous-total, un superviseur additionne. <strong>C'est MapReduce.</strong>
       </div>
       <div class="schema-row">
         <div class="sbox" style="border-color:#1e3a8a;color:#1e3a8a">Données source</div><span class="sarr">→</span>
@@ -559,8 +559,8 @@ Poser la question d'abord : "Comment vous y prendriez-vous pour calculer le sold
           <button class="opt" onclick="answer('q3',1,2)">Rien — la machine en panne était peut-être inactive</button>
           <button class="opt" onclick="answer('q3',2,2)">Les tâches sont automatiquement redistribuées sur les 9 autres — résultat inchangé</button>
         </div>
-        <div class="fb fb-ok" id="q3-ok"><i class="ti ti-circle-check"></i> Exactement — tolérance aux pannes. Les données sont répliquées (×3 par défaut). Le scheduler détecte l'échec et re[...]
-        <div class="fb fb-ko" id="q3-ko"><i class="ti ti-x"></i> Dans un système distribué bien conçu, la panne d'un nœud est un événement normal géré automatiquement. Les données étant[...]
+        <div class="fb fb-ok" id="q3-ok"><i class="ti ti-circle-check"></i> Exactement — tolérance aux pannes. Les données sont répliquées (×3 par défaut). Le scheduler détecte l'échec et relance les tâches sur d'autres nœuds. Transparent pour l'utilisateur.</div>
+        <div class="fb fb-ko" id="q3-ko"><i class="ti ti-x"></i> Dans un système distribué bien conçu, la panne d'un nœud est un événement normal géré automatiquement. Les données étant répliquées, elles existent ailleurs. Les tâches sont redistribuées sans intervention manuelle.</div>
       </div>
       <div class="done-badge" id="done3"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
@@ -578,36 +578,36 @@ Poser la question d'abord : "Comment vous y prendriez-vous pour calculer le sold
       </div>
     </div>
     <div class="sec-body" id="b4">
-Demander : "Qui utilise un Data Warehouse dans son organisation ? Qui a déjà eu des problèmes avec ?" — puis expliquer que le Lakehouse n'est pas une mode : c'est ce que Databricks, Snowflake et [...]
+Demander : "Qui utilise un Data Warehouse dans son organisation ? Qui a déjà eu des problèmes avec ?" — puis expliquer que le Lakehouse n'est pas une mode : c'est ce que Databricks, Snowflake et les grandes banques déploient aujourd'hui en production.
       </div>
       <div class="plat-stack">
         <div class="plat-item">
           <div class="plat-head" style="background:#1E2761;color:#CADCFC">Data Warehouse</div>
-          <div class="plat-body">Structuré uniquement · schema-on-write · SQL rapide · rigide et coûteux à faire évoluer<br><span class="plat-ex">Oracle, Teradata, Snowflake — reporting mensu[...]
+          <div class="plat-body">Structuré uniquement · schema-on-write · SQL rapide · rigide et coûteux à faire évoluer<br><span class="plat-ex">Oracle, Teradata, Snowflake — reporting mensuel, tableaux de bord direction</span></div>
         </div>
         <div class="plat-item">
           <div class="plat-head" style="background:#065f46;color:#a7f3d0">Data Lake</div>
-          <div class="plat-body">Tous formats · schema-on-read · stockage pas cher · risque de data swamp sans gouvernance<br><span class="plat-ex">HDFS, AWS S3, Azure ADLS — archive brute, donn[...]
+          <div class="plat-body">Tous formats · schema-on-read · stockage pas cher · risque de data swamp sans gouvernance<br><span class="plat-ex">HDFS, AWS S3, Azure ADLS — archive brute, données ML</span></div>
         </div>
         <div class="plat-item" style="border:1.5px solid #166534">
           <div class="plat-head" style="background:#166534;color:#bbf7d0;display:flex;align-items:center;gap:6px"><i class="ti ti-star" style="font-size:11px"></i> Lakehouse — standard 2025</div>
-          <div class="plat-body">ACID + schéma flexible + ML + BI sur une même plateforme · gouvernance intégrée<br><span class="plat-ex">Databricks Delta Lake, Apache Iceberg — pipeline scorin[...]
+          <div class="plat-body">ACID + schéma flexible + ML + BI sur une même plateforme · gouvernance intégrée<br><span class="plat-ex">Databricks Delta Lake, Apache Iceberg — pipeline scoring + reporting réglementaire</span></div>
         </div>
       </div>
       <div class="analogy">
-        <strong>Medallion Architecture (Bronze / Silver / Gold) :</strong> comme une raffinerie. Le brut arrive (Bronze = données brutes), il est raffiné (Silver = données certifiées), puis transf[...]
+        <strong>Medallion Architecture (Bronze / Silver / Gold) :</strong> comme une raffinerie. Le brut arrive (Bronze = données brutes), il est raffiné (Silver = données certifiées), puis transformé en produits finis (Gold = agrégats pour reporting réglementaire ou ML).
       </div>
       <div class="divider"></div>
       <div class="quiz-block">
         <div class="quiz-timer"><i class="ti ti-stopwatch"></i> 3 min individuel · puis discussion collective</div>
-        <div class="quiz-q">Votre DSI veut une plateforme unique pour : stocker des logs bruts de transactions, entraîner des modèles ML de scoring, et produire les rapports COREP pour la BCE. Que r[...]
+        <div class="quiz-q">Votre DSI veut une plateforme unique pour : stocker des logs bruts de transactions, entraîner des modèles ML de scoring, et produire les rapports COREP pour la BCE. Que recommandez-vous ?</div>
         <div class="opts" id="q4">
           <button class="opt" onclick="answer('q4',0,1)">Data Warehouse — supporte SQL et les rapports réglementaires</button>
           <button class="opt" onclick="answer('q4',1,1)">Lakehouse avec architecture Medallion — couvre les 3 besoins sur une seule plateforme</button>
           <button class="opt" onclick="answer('q4',2,1)">Data Lake — accepte tous les formats de données</button>
         </div>
-        <div class="fb fb-ok" id="q4-ok"><i class="ti ti-circle-check"></i> Parfait. Bronze ingère les logs bruts, Silver les certifie (COREP obligatoire), Gold produit les agrégats réglementaires.[...]
-        <div class="fb fb-ko" id="q4-ko"><i class="ti ti-x"></i> Ni le DWH (pas de ML natif, pas de données non structurées) ni le Data Lake seul (pas de ACID, gouvernance insuffisante pour COREP) n[...]
+        <div class="fb fb-ok" id="q4-ok"><i class="ti ti-circle-check"></i> Parfait. Bronze ingère les logs bruts, Silver les certifie (COREP obligatoire), Gold produit les agrégats réglementaires. Le ML s'entraîne sur Silver. Une infrastructure, trois usages couverts.</div>
+        <div class="fb fb-ko" id="q4-ko"><i class="ti ti-x"></i> Ni le DWH (pas de ML natif, pas de données non structurées) ni le Data Lake seul (pas de ACID, gouvernance insuffisante pour COREP) ne couvrent les 3 besoins. Le Lakehouse avec Medallion est la bonne réponse.</div>
       </div>
       <div class="done-badge" id="done4"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
@@ -629,14 +629,14 @@ Demander : "Qui utilise un Data Warehouse dans son organisation ? Qui a déjà e
         <i class="ti ti-users" style="font-size:14px"></i>
         En binômes · 20 min chrono · cocher les V impliqués pour chaque scénario · révéler la correction · discuter
       </div>
-Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correction collective : pour chaque scénario, demander à un binôme de justifier ses choix avant de révéler. Ne pas corriger[...]
+Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correction collective : pour chaque scénario, demander à un binôme de justifier ses choix avant de révéler. Ne pas corriger immédiatement — laisser le débat s'installer. Le scénario 5 est un piège intentionnel.
       </div>
       <div class="scenario-grid">
 
         <div class="scenario">
           <div class="sc-num">Scénario 1</div>
           <div class="sc-title">Détection de fraude carte bancaire</div>
-          <div class="sc-desc">Un réseau de paiement analyse chaque transaction en temps réel pour bloquer les opérations suspectes avant validation. 2 000 transactions par seconde, données struct[...]
+          <div class="sc-desc">Un réseau de paiement analyse chaque transaction en temps réel pour bloquer les opérations suspectes avant validation. 2 000 transactions par seconde, données structurées.</div>
           <div class="v-checks">
             <span class="vcheck" onclick="this.classList.toggle('sel')">Volume</span>
             <span class="vcheck" onclick="this.classList.toggle('sel')">Vélocité</span>
@@ -645,7 +645,7 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
             <span class="vcheck" onclick="this.classList.toggle('sel')">Valeur</span>
           </div>
           <button class="reveal-btn" onclick="reveal('r1')"><i class="ti ti-eye"></i> Voir la correction</button>
-          <div class="sc-reveal" id="r1"><strong>Vélocité</strong> (décision en ms) + <strong>Valeur</strong> (bloquer une fraude = gain direct) + <strong>Véracité</strong> (fausse alerte = coût[...]
+          <div class="sc-reveal" id="r1"><strong>Vélocité</strong> (décision en ms) + <strong>Valeur</strong> (bloquer une fraude = gain direct) + <strong>Véracité</strong> (fausse alerte = coût client). Le Volume est modéré (2K tx/sec), la Variété faible (données structurées uniquement).</div>
         </div>
 
         <div class="scenario">
@@ -660,7 +660,7 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
             <span class="vcheck" onclick="this.classList.toggle('sel')">Valeur</span>
           </div>
           <button class="reveal-btn" onclick="reveal('r2')"><i class="ti ti-eye"></i> Voir la correction</button>
-          <div class="sc-reveal" id="r2"><strong>Volume</strong> (50M lignes) + <strong>Véracité</strong> (données certifiées obligatoires, sanction si erreur) + <strong>Valeur</strong> (conformit[...]
+          <div class="sc-reveal" id="r2"><strong>Volume</strong> (50M lignes) + <strong>Véracité</strong> (données certifiées obligatoires, sanction si erreur) + <strong>Valeur</strong> (conformité = licence d'exploitation). La Vélocité est modérée — T+1 est contraignant mais ce n'est pas du temps réel pur.</div>
         </div>
 
         <div class="scenario">
@@ -675,7 +675,7 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
             <span class="vcheck" onclick="this.classList.toggle('sel')">Valeur</span>
           </div>
           <button class="reveal-btn" onclick="reveal('r3')"><i class="ti ti-eye"></i> Voir la correction</button>
-          <div class="sc-reveal" id="r3"><strong>Variété</strong> (500+ variables de sources multiples) + <strong>Véracité</strong> (une erreur = mauvaise décision crédit) + <strong>Valeur</strong> ([...]
+          <div class="sc-reveal" id="r3"><strong>Variété</strong> (500+ variables de sources multiples) + <strong>Véracité</strong> (une erreur = mauvaise décision crédit) + <strong>Valeur</strong> (réduction du taux de défaut) + <strong>Vélocité</strong> (décision &lt; 5 min). Volume global significatif (millions de demandes/an).</div>
         </div>
 
         <div class="scenario">
@@ -690,13 +690,13 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
             <span class="vcheck" onclick="this.classList.toggle('sel')">Valeur</span>
           </div>
           <button class="reveal-btn" onclick="reveal('r4')"><i class="ti ti-eye"></i> Voir la correction</button>
-          <div class="sc-reveal" id="r4">Les <strong>5V sont tous présents</strong>. Volume (500K véhicules en continu) + Vélocité (flux temps réel) + Variété (GPS + accéléromètre + vidéo) [...]
+          <div class="sc-reveal" id="r4">Les <strong>5V sont tous présents</strong>. Volume (500K véhicules en continu) + Vélocité (flux temps réel) + Variété (GPS + accéléromètre + vidéo) + Véracité (capteurs parfois défaillants) + Valeur (tarification juste = avantage concurrentiel). Cas Big Data complet.</div>
         </div>
 
         <div class="scenario" style="border-color:#fca5a5">
           <div class="sc-num" style="background:#991b1b">Scénario 5 — Piège</div>
           <div class="sc-title">Archivage de contrats (back-office)</div>
-          <div class="sc-desc">Un service juridique numérise et stocke 200 000 contrats PDF historiques pour consultation occasionnelle par les équipes conformité. Pas de traitement analytique pré[...]
+          <div class="sc-desc">Un service juridique numérise et stocke 200 000 contrats PDF historiques pour consultation occasionnelle par les équipes conformité. Pas de traitement analytique prévu.</div>
           <div class="v-checks">
             <span class="vcheck" onclick="this.classList.toggle('sel')">Volume</span>
             <span class="vcheck" onclick="this.classList.toggle('sel')">Vélocité</span>
@@ -705,7 +705,7 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
             <span class="vcheck" onclick="this.classList.toggle('sel')">Valeur</span>
           </div>
           <button class="reveal-btn" onclick="reveal('r5')"><i class="ti ti-eye"></i> Voir la correction</button>
-          <div class="sc-reveal" id="r5"><strong>Ce scénario NE justifie PAS une architecture Big Data.</strong> 200 000 PDFs = quelques centaines de Go maximum. Un serveur de fichiers standard ou un[...]
+          <div class="sc-reveal" id="r5"><strong>Ce scénario NE justifie PAS une architecture Big Data.</strong> 200 000 PDFs = quelques centaines de Go maximum. Un serveur de fichiers standard ou un DMS suffit. Piège classique : tout n'est pas Big Data. Le coût d'une infrastructure distribuée serait totalement disproportionné ici.</div>
         </div>
 
       </div>
@@ -728,20 +728,20 @@ Laisser les binômes travailler 12 min en silence sur les 5 scénarios. Correcti
       </div>
     </div>
     <div class="sec-body" id="b6">
-Tour de table rapide : chaque participant dit en une phrase ce qu'il retient. Puis annoncer : "Maintenant qu'on sait identifier un problème Big Data, on va voir comment les architectures y répondent[...]
+Tour de table rapide : chaque participant dit en une phrase ce qu'il retient. Puis annoncer : "Maintenant qu'on sait identifier un problème Big Data, on va voir comment les architectures y répondent." → transition vers M2.
       </div>
       <div class="synthese-points">
         <div class="syn-point">
           <div class="syn-num">1</div>
-          <div><strong>Diagnostiquer avant d'architechter</strong> — un problème justifie une infrastructure Big Data uniquement s'il dépasse réellement les capacités d'une solution classique. L[...]
+          <div><strong>Diagnostiquer avant d'architechter</strong> — un problème justifie une infrastructure Big Data uniquement s'il dépasse réellement les capacités d'une solution classique. Le scénario 5 le rappelle.</div>
         </div>
         <div class="syn-point">
           <div class="syn-num">2</div>
-          <div><strong>Les V ne s'excluent pas</strong> — la plupart des cas finance en cochent 3 ou 4 simultanément. L'architecture choisie doit répondre à tous les V présents, pas seulement au[...]
+          <div><strong>Les V ne s'excluent pas</strong> — la plupart des cas finance en cochent 3 ou 4 simultanément. L'architecture choisie doit répondre à tous les V présents, pas seulement au plus visible.</div>
         </div>
         <div class="syn-point">
           <div class="syn-num">3</div>
-          <div><strong>La Valeur est le V le plus important</strong> — sans valeur métier identifiée, distribuer des données n'a aucun sens. Toujours commencer par "quel problème business résou[...]
+          <div><strong>La Valeur est le V le plus important</strong> — sans valeur métier identifiée, distribuer des données n'a aucun sens. Toujours commencer par "quel problème business résout-on ?"</div>
         </div>
       </div>
       <button class="complete-btn" onclick="markDone('s6','done6','st6');updateProgress()">
@@ -802,12 +802,7 @@ Tour de table rapide : chaque participant dit en une phrase ce qu'il retient. Pu
       b.style.pointerEvents = 'none';
     });
     const ok = idx === correct;
-    
-    // ✅ DÉLAI DE 10 SECONDES avant d'afficher le feedback
-    setTimeout(() => {
-      document.getElementById(qid + (ok ? '-ok' : '-ko')).style.display = 'block';
-    }, 10000);
-    
+    document.getElementById(qid + (ok ? '-ok' : '-ko')).style.display = 'block';
     const map = { q1:'s1', q2:'s2', q3:'s3', q4:'s4' };
     if (map[qid]) markDone(map[qid], 'done' + map[qid].slice(1), 'st' + map[qid].slice(1));
     updateProgress();

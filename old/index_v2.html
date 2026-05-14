@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 1 — Big Data pour la Finance | ISCAE Casablanca</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1E2761;
+    --gold: #E8B84B;
+    --white: #ffffff;
+    --bg: #f5f7ff;
+    --card: #ffffff;
+    --border: #dde3f5;
+    --text: #1f2937;
+    --muted: #64748b;
+    --hint: #94a3b8;
+    --success-bg: #ecfdf5;
+    --success-text: #065f46;
+    --success-border: #6ee7b7;
+    --danger-bg: #fef2f2;
+    --danger-text: #991b1b;
+    --danger-border: #fca5a5;
+    --info-bg: #eff6ff;
+    --info-text: #1e40af;
+    --info-border: #93c5fd;
+    --warn-bg: #fffbeb;
+    --warn-text: #92400e;
+    --micro-bg: #e0effe;
+    --micro-text: #1e3a8a;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .site-header {
+    background: var(--navy);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-logo {
+    width: 32px; height: 32px;
+    background: var(--gold);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; color: var(--navy);
+  }
+  .header-title { font-size: 14px; font-weight: 600; color: #fff; }
+  .header-sub { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 1px; }
+  .header-badge {
+    font-size: 10px; font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: var(--gold);
+    color: var(--navy);
+    white-space: nowrap;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .hero {
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-title { font-size: 20px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .hero-sub { font-size: 13px; color: var(--muted); margin-bottom: 1rem; line-height: 1.6; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 10px; }
+  .meta-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: var(--muted);
+    background: var(--bg); border-radius: 99px;
+    padding: 4px 10px; border: 0.5px solid var(--border);
+  }
+  .meta-item i { font-size: 13px; }
+
+  .protocol {
+    background: var(--info-bg);
+    border: 0.5px solid var(--info-border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    font-size: 12px;
+    color: var(--info-text);
+    line-height: 1.7;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .protocol i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-bar {
+    background: var(--border);
+    border-radius: 99px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 5px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--navy);
+    border-radius: 99px;
+    transition: width 0.5s ease;
+  }
+  .progress-label { font-size: 11px; color: var(--hint); text-align: right; }
+
+  /* sections : affichage séquentiel */
+  .section {
+    display: none;
+    background: var(--card);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: box-shadow .2s;
+  }
+  .section.active-section {
+    display: block;
+  }
+  .section:hover { box-shadow: 0 2px 12px rgba(30,39,97,0.07); }
+
+  .sec-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background .15s;
+  }
+  .sec-head:hover { background: var(--bg); }
+
+  .sec-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; flex-shrink: 0;
+  }
+  .sec-title { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; line-height: 1.35; }
+  .sec-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .sec-dur { font-size: 11px; color: var(--hint); display: flex; align-items: center; gap: 3px; }
+  .sec-status {
+    font-size: 10px; font-weight: 500;
+    padding: 2px 8px; border-radius: 99px;
+    white-space: nowrap;
+  }
+  .st-todo { background: #f1f5f9; color: var(--hint); }
+  .st-active { background: var(--info-bg); color: var(--info-text); }
+  .st-done { background: var(--success-bg); color: var(--success-text); }
+  .chevron { font-size: 14px; color: var(--hint); transition: transform .25s; flex-shrink: 0; }
+
+  .sec-body { padding: 0 16px 16px; display: none; }
+  .sec-body.open { display: block; }
+
+  .concept {
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 10px 13px;
+    margin: 8px 0;
+    font-size: 12px; color: var(--muted); line-height: 1.7;
+  }
+  .concept strong { color: var(--text); font-weight: 600; }
+
+  .analogy {
+    border-left: 3px solid var(--gold);
+    background: var(--bg);
+    border-radius: 0 8px 8px 0;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-size: 12px; color: var(--muted); line-height: 1.65;
+  }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+  .grid-card { border: 0.5px solid var(--border); border-radius: 8px; padding: 9px 11px; }
+  .gc-name { font-size: 11px; font-weight: 600; margin-bottom: 3px; }
+  .gc-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .v-rows { display: flex; flex-direction: column; gap: 5px; margin: 8px 0; }
+  .v-row { display: flex; gap: 9px; align-items: flex-start; background: var(--bg); border-radius: 8px; padding: 7px 10px; }
+  .v-name { min-width: 74px; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+  .v-content { flex: 1; }
+  .v-text { font-size: 11px; color: var(--text); line-height: 1.5; }
+  .v-fin { font-size: 10px; color: var(--hint); font-style: italic; margin-top: 2px; }
+  .plat-stack { display: flex; flex-direction: column; gap: 6px; margin: 8px 0; }
+  .plat-item { border: 0.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .plat-head { padding: 6px 11px; font-size: 10px; font-weight: 600; }
+  .plat-body { padding: 7px 11px; font-size: 11px; color: var(--muted); line-height: 1.55; }
+  .schema-row { display: flex; align-items: center; gap: 5px; margin: 10px 0; flex-wrap: wrap; }
+  .sbox { border: 0.5px solid var(--border); border-radius: 7px; padding: 5px 9px; font-size: 10px; font-weight: 600; background: var(--card); white-space: nowrap; }
+  .sarr { font-size: 14px; color: var(--hint); }
+  .divider { height: 0.5px; background: var(--border); margin: 12px 0; }
+  .quiz-block { margin: 12px 0; }
+  .quiz-timer { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--hint); margin-bottom: 7px; background: var(--bg); border-radius: 99px; padding: 3px 10px; width: fit-content; border: 0.5px solid var(--border); }
+  .quiz-q { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.55; }
+  .opts { display: flex; flex-direction: column; gap: 6px; }
+  .opt {
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 9px 12px;
+    font-size: 12px; cursor: pointer;
+    color: var(--text);
+    background: var(--card);
+    text-align: left;
+    transition: background .15s, border-color .15s;
+    font-family: inherit;
+  }
+  .opt:hover:not(:disabled) { background: var(--bg); border-color: #b0bcda; }
+  .opt.correct { border-color: var(--success-border); background: var(--success-bg); color: var(--success-text); }
+  .opt.wrong { border-color: var(--danger-border); background: var(--danger-bg); color: var(--danger-text); }
+  .opt:disabled { cursor: not-allowed; opacity: 0.7; }
+  .fb { font-size: 11px; margin-top: 7px; padding: 8px 11px; border-radius: 8px; line-height: 1.6; display: none; }
+  .fb-ok { background: var(--success-bg); color: var(--success-text); border: 0.5px solid var(--success-border); }
+  .fb-ko { background: var(--danger-bg); color: var(--danger-text); border: 0.5px solid var(--danger-border); }
+  .timer-wait {
+    font-size: 11px; margin-top: 8px; padding: 6px 10px; background: var(--info-bg); color: var(--info-text);
+    border-radius: 8px; display: inline-block; border: 0.5px solid var(--info-border);
+  }
+  .done-badge { display: none; align-items: center; gap: 5px; font-size: 11px; color: var(--success-text); margin-top: 10px; font-weight: 500; }
+  .micro-header { background: var(--micro-bg); border-radius: 8px; padding: 8px 11px; margin: 10px 0; display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--micro-text); }
+  .scenario-grid { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .scenario { border: 0.5px solid var(--border); border-radius: 10px; padding: 11px 13px; background: var(--card); }
+  .sc-num { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 7px; border-radius: 99px; background: var(--navy); color: #fff; margin-bottom: 5px; }
+  .sc-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .sc-desc { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+  .v-checks { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+  .vcheck {
+    font-size: 10px; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+    border: 1px solid var(--border); cursor: pointer; color: var(--muted);
+    background: var(--card); transition: all .15s; user-select: none;
+  }
+  .vcheck.sel { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .reveal-btn { font-size: 11px; color: var(--info-text); cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; display: flex; align-items: center; gap: 4px; font-weight: 500; margin-top: 5px; }
+  .reveal-btn:hover { text-decoration: underline; }
+  .sc-reveal { font-size: 11px; padding: 8px 11px; border-radius: 8px; margin-top: 7px; line-height: 1.6; display: none; border: 0.5px solid var(--success-border); background: var(--success-bg); color: var(--success-text); }
+  .sc-reveal.show { display: block; }
+  .synthese-points { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; }
+  .syn-point { display: flex; gap: 10px; align-items: flex-start; padding: 9px 12px; background: var(--bg); border-radius: 8px; font-size: 12px; color: var(--text); line-height: 1.55; }
+  .syn-num { width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .final-box { display: none; background: var(--success-bg); border: 1px solid var(--success-border); border-radius: 14px; padding: 1.25rem 1.5rem; margin-top: 1.5rem; text-align: center; }
+  .final-icon { font-size: 32px; color: var(--success-text); margin-bottom: 8px; }
+  .final-title { font-size: 16px; font-weight: 700; color: var(--success-text); margin-bottom: 5px; }
+  .complete-btn { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 7px 16px; border-radius: 99px; border: none; background: var(--navy); color: #fff; cursor: pointer; font-family: inherit; transition: opacity .15s; margin-top: 10px; }
+  .complete-btn:hover { opacity: 0.85; }
+  .site-footer { background: var(--navy); color: rgba(255,255,255,0.5); text-align: center; font-size: 11px; padding: 1rem; margin-top: 3rem; }
+  .site-footer span { color: var(--gold); }
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } .hero-title { font-size: 17px; } .container { padding: 1rem 1rem 3rem; } }
+</style>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><div class="header-left"><div class="header-logo">BD</div><div><div class="header-title">Big Data pour la Finance</div><div class="header-sub">ISCAE Casablanca — Master Finance Digitale 2025-2026</div></div></div><div class="header-badge">Lab 1 / 5</div></div></header>
+<main class="container">
+  <div class="hero">
+    <div class="hero-title">Lab 1 — Concepts fondamentaux & diagnostic Big Data</div>
+    <div class="hero-sub">Comprendre les fondements du Big Data et savoir identifier si un problème métier justifie une architecture distribuée — avant toute ligne de code.</div>
+    <div class="meta-row"><span class="meta-item"><i class="ti ti-clock"></i> 55 minutes</span><span class="meta-item"><i class="ti ti-layout-grid"></i> 6 sections</span><span class="meta-item"><i class="ti ti-users"></i> Individuel + binômes</span><span class="meta-item"><i class="ti ti-device-laptop"></i> Navigateur uniquement</span><span class="meta-item"><i class="ti ti-target"></i> 4 questions + 5 scénarios</span></div>
+  </div>
+  <div class="protocol"><i class="ti ti-info-circle"></i><div><strong>Séquencement & timer pédagogique :</strong> les sections s'affichent une à une. Pour chaque QCM (sections 1 à 4), choisissez une réponse → validation avec <strong>3 secondes</strong> avant affichage de la solution. Micro-lab et synthèse : bouton “compléter” avec délai identique.</div></div>
+  <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div><div class="progress-label" id="prog-lbl">0 / 6 sections complétées</div></div>
+
+  <!-- SECTION 1 -->
+  <div class="section" id="s1"><div class="sec-head" onclick="toggleSectionBody('s1')"><div class="sec-num" style="background:#dbeafe;color:#1e3a8a">1</div><span class="sec-title">Pourquoi le Big Data ? — Le problème avant la solution</span><div class="sec-right"><span class="sec-dur"><i class="ti ti-clock"></i> 10 min</span><span class="sec-status st-todo" id="st1">À faire</span><i class="ti ti-chevron-down chevron" id="ch1"></i></div></div><div class="sec-body" id="b1"><div class="concept"><strong>Le point de départ :</strong> une base relationnelle classique fonctionne très bien jusqu'à quelques dizaines de Go. Au-delà, les requêtes ralentissent, les jointures explosent, et le serveur atteint ses limites physiques. Visa traite 65 milliards de transactions par an — ces volumes ne rentrent plus dans une seule machine.</div><div class="analogy"><strong>Analogie :</strong> un seul caissier un samedi après-midi — compétent, mais file infinie. La solution n'est pas un caissier plus rapide, c'est <strong>d'ouvrir plusieurs caisses en parallèle</strong>. C'est le principe du Big Data : distribuer le travail sur plusieurs machines.</div><div class="grid2"><div class="grid-card"><div class="gc-name">Stockage</div><div class="gc-desc">Répartir les données sur N machines. 1 Po = 1 000 disques de 1 To.</div></div><div class="grid-card"><div class="gc-name">Traitement parallèle</div><div class="gc-desc">100 M lignes sur 1 machine = heures. Sur 100 machines = minutes.</div></div><div class="grid-card"><div class="gc-name">Vélocité</div><div class="gc-desc">Fraude détectée en &lt; 2 sec. Une BD classique ne suit pas un flux continu.</div></div><div class="grid-card"><div class="gc-name">Variété</div><div class="gc-desc">Formulaires + PDF + logs + JSON — les SGBDR ne gèrent pas tout cela nativement.</div></div></div><div class="divider"></div><div class="quiz-block"><div class="quiz-timer"><i class="ti ti-stopwatch"></i> 3 min individuel · timer réponse 3s</div><div class="quiz-q">Un assureur veut analyser 5 ans d'historique de sinistres (50 millions de dossiers) pour recalibrer ses modèles de risque. Quelle est la vraie limite d'une base SQL classique ici ?</div><div class="opts" id="q1"><button class="opt" data-q="q1" data-idx="0" data-correct="1">Le langage SQL n'est pas adapté à l'analyse de risque</button><button class="opt" data-q="q1" data-idx="1" data-correct="1">La capacité de stockage et de traitement d'une seule machine est insuffisante à cette échelle</button><button class="opt" data-q="q1" data-idx="2" data-correct="1">Les bases SQL ne supportent pas les données d'assurance</button></div><div class="fb fb-ok" id="q1-ok"><i class="ti ti-circle-check"></i> Exactement. Le problème est physique, pas logiciel. SQL peut parfaitement décrire la requête — c'est l'exécution sur une seule machine qui devient impossible. C'est précisément ce que le Big Data résout en distribuant le calcul.</div><div class="fb fb-ko" id="q1-ko"><i class="ti ti-x"></i> SQL est tout à fait capable d'analyser des données de risque. Le vrai obstacle est physique : une seule machine ne peut pas traiter 50 millions de dossiers dans un délai raisonnable. C'est la scalabilité que le Big Data adresse.</div><div id="wait1"></div></div><div class="done-badge" id="done1"><i class="ti ti-circle-check"></i> Section complétée</div></div></div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="s2"><div class="sec-head" onclick="toggleSectionBody('s2')"><div class="sec-num" style="background:#d1fae5;color:#065f46">2</div><span class="sec-title">Les 5V — Caractériser un problème Big Data</span><div class="sec-right"><span class="sec-dur"><i class="ti ti-clock"></i> 10 min</span><span class="sec-status st-todo" id="st2">À faire</span><i class="ti ti-chevron-down chevron" id="ch2"></i></div></div><div class="sec-body" id="b2"><div class="v-rows"><div class="v-row"><div class="v-name">Volume</div><div class="v-content"><div class="v-text">Quantité dépassant la capacité d'une machine.</div><div class="v-fin">Visa : 100 Po stockés · PayPal : 15 Mds tx/an</div></div></div><div class="v-row"><div class="v-name">Vélocité</div><div class="v-content"><div class="v-text">Données traitées en continu, pas en batch.</div><div class="v-fin">Alerte fraude &lt; 2 sec · Trading HFT &lt; 1 ms</div></div></div><div class="v-row"><div class="v-name">Variété</div><div class="v-content"><div class="v-text">Sources hétérogènes, formats mixtes.</div><div class="v-fin">Dossier client : formulaires + PDF + logs + emails</div></div></div><div class="v-row"><div class="v-name">Véracité</div><div class="v-content"><div class="v-text">Qualité et fiabilité non garanties.</div><div class="v-fin">Reporting BCE : données certifiées obligatoires</div></div></div><div class="v-row"><div class="v-name">Valeur</div><div class="v-content"><div class="v-text">Extraire une valeur métier actionnable.</div><div class="v-fin">Scoring crédit : −30% de défauts via ML</div></div></div></div><div class="divider"></div><div class="quiz-block"><div class="quiz-timer"><i class="ti ti-stopwatch"></i> 3 min individuel · timer réponse 3s</div><div class="quiz-q">Un assureur analyse des données de conduite (télématique auto) pour ajuster les primes en temps réel. Quels V sont principalement en jeu ?</div><div class="opts" id="q2"><button class="opt" data-q="q2" data-idx="0" data-correct="1">Volume uniquement — les vidéos de conduite sont très volumineuses</button><button class="opt" data-q="q2" data-idx="1" data-correct="1">Vélocité + Variété + Valeur — flux continu, données hétérogènes, décision tarifaire</button><button class="opt" data-q="q2" data-idx="2" data-correct="1">Véracité uniquement — on ne peut pas faire confiance aux capteurs GPS</button></div><div class="fb fb-ok" id="q2-ok"><i class="ti ti-circle-check"></i> Très bien. Vélocité (flux temps réel véhicule), Variété (GPS + accéléromètre + vidéo), Valeur (ajustement de prime = décision business directe). Le Volume est présent mais secondaire ici.</div><div class="fb fb-ko" id="q2-ko"><i class="ti ti-x"></i> Pensez multi-dimensionnel : données hétérogènes (Variété), flux continu depuis le véhicule (Vélocité), décision de tarification (Valeur). Le Volume est présent mais n'est pas le V dominant dans ce contexte.</div><div id="wait2"></div></div><div class="done-badge" id="done2"><i class="ti ti-circle-check"></i> Section complétée</div></div></div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="s3"><div class="sec-head" onclick="toggleSectionBody('s3')"><div class="sec-num" style="background:#fef3c7;color:#92400e">3</div><span class="sec-title">Distribution & parallélisme — Le principe fondateur</span><div class="sec-right"><span class="sec-dur"><i class="ti ti-clock"></i> 10 min</span><span class="sec-status st-todo" id="st3">À faire</span><i class="ti ti-chevron-down chevron" id="ch3"></i></div></div><div class="sec-body" id="b3"><div class="concept"><strong>L'idée centrale :</strong> au lieu d'amener les données vers le calcul, on amène le calcul vers les données. On divise un problème en sous-problèmes traités en parallèle sur les machines où les données résident déjà.</div><div class="analogy"><strong>Analogie finance :</strong> calculer le solde de 10 millions de comptes. Option A — un seul analyste, des semaines. Option B — 1 000 groupes de 10 000 comptes, chaque analyste calcule son sous-total, un superviseur additionne. <strong>C'est MapReduce.</strong></div><div class="schema-row"><div class="sbox">Données source</div><span class="sarr">→</span><div class="sbox">Découpage blocs</div><span class="sarr">→</span><div class="sbox">Traitement //</div><span class="sarr">→</span><div class="sbox">Consolidation</div><span class="sarr">→</span><div class="sbox">Résultat</div></div><div class="concept"><strong>3 propriétés clés d'un système distribué :</strong><br><br><strong>Scalabilité horizontale</strong> — ajouter des machines (pas upgrader une seule). Coût linéaire.<br><br><strong>Tolérance aux pannes</strong> — données répliquées ×3. Tâches échouées relancées automatiquement.<br><br><strong>Localité des données</strong> — le calcul va aux données, pas l'inverse. Évite des transferts réseau massifs.</div><div class="divider"></div><div class="quiz-block"><div class="quiz-timer"><i class="ti ti-stopwatch"></i> 3 min individuel · timer réponse 3s</div><div class="quiz-q">Votre pipeline de scoring tourne sur 10 machines. L'une tombe en panne en cours d'exécution. Que se passe-t-il dans un système Big Data bien conçu ?</div><div class="opts" id="q3"><button class="opt" data-q="q3" data-idx="0" data-correct="2">Le job entier échoue et doit être relancé manuellement depuis le début</button><button class="opt" data-q="q3" data-idx="1" data-correct="2">Rien — la machine en panne était peut-être inactive</button><button class="opt" data-q="q3" data-idx="2" data-correct="2">Les tâches sont automatiquement redistribuées sur les 9 autres — résultat inchangé</button></div><div class="fb fb-ok" id="q3-ok"><i class="ti ti-circle-check"></i> Exactement — tolérance aux pannes. Les données sont répliquées (×3 par défaut). Le scheduler détecte l'échec et relance les tâches sur d'autres nœuds. Transparent pour l'utilisateur.</div><div class="fb fb-ko" id="q3-ko"><i class="ti ti-x"></i> Dans un système distribué bien conçu, la panne d'un nœud est un événement normal géré automatiquement. Les données étant répliquées, elles existent ailleurs. Les tâches sont redistribuées sans intervention manuelle.</div><div id="wait3"></div></div><div class="done-badge" id="done3"><i class="ti ti-circle-check"></i> Section complétée</div></div></div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="s4"><div class="sec-head" onclick="toggleSectionBody('s4')"><div class="sec-num" style="background:#dcfce7;color:#166534">4</div><span class="sec-title">Plateformes de données — DWH, Data Lake, Lakehouse</span><div class="sec-right"><span class="sec-dur"><i class="ti ti-clock"></i> 10 min</span><span class="sec-status st-todo" id="st4">À faire</span><i class="ti ti-chevron-down chevron" id="ch4"></i></div></div><div class="sec-body" id="b4"><div class="plat-stack"><div class="plat-item"><div class="plat-head">Data Warehouse</div><div class="plat-body">Structuré uniquement · schema-on-write · SQL rapide · rigide et coûteux à faire évoluer</div></div><div class="plat-item"><div class="plat-head">Data Lake</div><div class="plat-body">Tous formats · schema-on-read · stockage pas cher · risque de data swamp sans gouvernance</div></div><div class="plat-item"><div class="plat-head">Lakehouse — standard 2025</div><div class="plat-body">ACID + schéma flexible + ML + BI sur une même plateforme · gouvernance intégrée</div></div></div><div class="analogy"><strong>Medallion Architecture (Bronze / Silver / Gold) :</strong> comme une raffinerie. Le brut arrive (Bronze = données brutes), il est raffiné (Silver = données certifiées), puis transformé en produits finis (Gold = agrégats pour reporting réglementaire ou ML).</div><div class="divider"></div><div class="quiz-block"><div class="quiz-timer"><i class="ti ti-stopwatch"></i> 3 min individuel · timer réponse 3s</div><div class="quiz-q">Votre DSI veut une plateforme unique pour : stocker des logs bruts de transactions, entraîner des modèles ML de scoring, et produire les rapports COREP pour la BCE. Que recommandez-vous ?</div><div class="opts" id="q4"><button class="opt" data-q="q4" data-idx="0" data-correct="1">Data Warehouse — supporte SQL et les rapports réglementaires</button><button class="opt" data-q="q4" data-idx="1" data-correct="1">Lakehouse avec architecture Medallion — couvre les 3 besoins sur une seule plateforme</button><button class="opt" data-q="q4" data-idx="2" data-correct="1">Data Lake — accepte tous les formats de données</button></div><div class="fb fb-ok" id="q4-ok"><i class="ti ti-circle-check"></i> Parfait. Bronze ingère les logs bruts, Silver les certifie (COREP obligatoire), Gold produit les agrégats réglementaires. Le ML s'entraîne sur Silver. Une infrastructure, trois usages couverts.</div><div class="fb fb-ko" id="q4-ko"><i class="ti ti-x"></i> Ni le DWH (pas de ML natif, pas de données non structurées) ni le Data Lake seul (pas de ACID, gouvernance insuffisante pour COREP) ne couvrent les 3 besoins. Le Lakehouse avec Medallion est la bonne réponse.</div><div id="wait4"></div></div><div class="done-badge" id="done4"><i class="ti ti-circle-check"></i> Section complétée</div></div></div>
+
+  <!-- SECTION 5 : MICRO-LAB -->
+  <div class="section" id="s5"><div class="sec-head" onclick="toggleSectionBody('s5')"><div class="sec-num" style="background:#bfdbfe;color:#1e3a8a">5</div><span class="sec-title">Micro-lab — Diagnostic Big Data sur 5 scénarios finance</span><div class="sec-right"><span class="sec-dur"><i class="ti ti-clock"></i> 20 min</span><span class="sec-status st-todo" id="st5">À faire</span><i class="ti ti-chevron-down chevron" id="ch5"></i></div></div><div class="sec-body" id="b5"><div class="micro-header"><i class="ti ti-users"></i> En binômes · cochez les V pertinents pour chaque scénario · puis cliquez sur "Valider le micro-lab" → délai 3s avant corrections détaillées.</div><div class="scenario-grid" id="scenariosContainer">${/* same scenarios dynamically, but kept as static */}</div><button class="complete-btn" id="validateMicroLabBtn"><i class="ti ti-circle-check"></i> Valider le micro-lab (délai 3s)</button><div class="done-badge" id="done5"><i class="ti ti-circle-check"></i> Micro-lab complété</div></div></div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="s6"><div class="sec-head" onclick="toggleSectionBody('s6')"><div class="sec-num" style="background:#f1f5f9;color:#64748b">6</div><span class="sec-title">Synthèse — 3 réflexes à garder</span><div class="sec-right"><span class="sec-dur"><i class="ti ti-clock"></i> 5 min</span><span class="sec-status st-todo" id="st6">À faire</span><i class="ti ti-chevron-down chevron" id="ch6"></i></div></div><div class="sec-body" id="b6"><div class="synthese-points"><div class="syn-point"><div class="syn-num">1</div><div><strong>Diagnostiquer avant d'architechter</strong> — un problème justifie une infrastructure Big Data uniquement s'il dépasse réellement les capacités d'une solution classique.</div></div><div class="syn-point"><div class="syn-num">2</div><div><strong>Les V ne s'excluent pas</strong> — la plupart des cas finance en cochent 3 ou 4 simultanément. L'architecture choisie doit répondre à tous les V présents.</div></div><div class="syn-point"><div class="syn-num">3</div><div><strong>La Valeur est le V le plus important</strong> — sans valeur métier identifiée, distribuer des données n'a aucun sens. Toujours commencer par "quel problème business résout-on ?"</div></div></div><button class="complete-btn" id="completeSynthBtn"><i class="ti ti-circle-check"></i> Lab 1 terminé</button><div class="done-badge" id="done6"><i class="ti ti-circle-check"></i> Lab 1 terminé — prêt pour M2</div></div></div>
+
+  <div class="final-box" id="final"><div class="final-icon"><i class="ti ti-circle-check"></i></div><div class="final-title">Lab 1 complété !</div><div class="final-body">Vous maîtrisez les 4 concepts fondamentaux du Big Data et savez diagnostiquer si un problème finance justifie une architecture distribuée. Vous êtes prêt pour la suite.</div><div class="final-tags"><span class="ftag">5V compris</span><span class="ftag">Distribution maîtrisée</span><span class="ftag">DWH vs Lake vs Lakehouse</span><span class="ftag">Diagnostic finance</span></div><div class="next-label">→ Prochaine étape : M2 — Architecture Hadoop, Lakehouse & Cloud</div></div>
+</main>
+<footer class="site-footer">ISCAE Casablanca · Master Finance Digitale · <span>Big Data pour la Finance</span> · 2025-2026</footer>
+
+<script>
+  // ----- ETAT & SÉQUENCEMENT -----
+  const sectionsOrder = ['s1','s2','s3','s4','s5','s6'];
+  let currentIndex = 0;
+  const sectionDone = { s1:false, s2:false, s3:false, s4:false, s5:false, s6:false };
+  const totalSections = 6;
+  let activeTimers = {};
+
+  // Helper : afficher uniquement la section active
+  function showSectionOnly(sectionId) {
+    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active-section'));
+    const target = document.getElementById(sectionId);
+    if (target) target.classList.add('active-section');
+  }
+
+  // update progress + final
+  function updateGlobalProgress() {
+    const completed = Object.values(sectionDone).filter(v => v === true).length;
+    const percent = (completed / totalSections) * 100;
+    document.getElementById('prog').style.width = percent + '%';
+    document.getElementById('prog-lbl').innerText = completed + ' / ' + totalSections + ' sections complétées';
+    if (completed === totalSections) document.getElementById('final').style.display = 'block';
+  }
+
+  function markSectionDone(sectionId, statusSpanId, doneBadgeId) {
+    if (sectionDone[sectionId]) return;
+    sectionDone[sectionId] = true;
+    const badge = document.getElementById(doneBadgeId);
+    if (badge) badge.style.display = 'flex';
+    const statusSpan = document.getElementById(statusSpanId);
+    if (statusSpan) { statusSpan.innerText = 'Complété'; statusSpan.className = 'sec-status st-done'; }
+    updateGlobalProgress();
+    // Activer section suivante
+    let nextIdx = sectionsOrder.indexOf(sectionId) + 1;
+    if (nextIdx < sectionsOrder.length) {
+      const nextId = sectionsOrder[nextIdx];
+      showSectionOnly(nextId);
+      // Ouvrir le corps de la nouvelle section par défaut pour lisibilité
+      const nextBody = document.getElementById('b' + nextId.slice(1));
+      const nextChevron = document.getElementById('ch' + nextId.slice(1));
+      if (nextBody && !nextBody.classList.contains('open')) {
+        nextBody.classList.add('open');
+        if (nextChevron) nextChevron.style.transform = 'rotate(180deg)';
+      }
+    }
+  }
+
+  // Gestion du timer pour les QCM (sections 1-4)
+  function setupQuizHandlers() {
+    const qMapping = { q1:'s1', q2:'s2', q3:'s3', q4:'s4' };
+    for (let [qid, sectionId] of Object.entries(qMapping)) {
+      const buttons = document.querySelectorAll(`#${qid} .opt`);
+      buttons.forEach(btn => {
+        btn.removeEventListener('click', quizClickHandler);
+        btn.addEventListener('click', quizClickHandler);
+        btn.dataset.qid = qid;
+        btn.dataset.section = sectionId;
+      });
+    }
+  }
+  function quizClickHandler(e) {
+    const btn = e.currentTarget;
+    const qid = btn.dataset.qid;
+    const sectionId = btn.dataset.section;
+    if (sectionDone[sectionId]) return;
+    const idx = parseInt(btn.dataset.idx);
+    const correctIdx = parseInt(btn.dataset.correct);
+    const container = document.getElementById(qid);
+    if (container.dataset.answered === 'true') return;
+    container.dataset.answered = 'true';
+    // désactiver tous les boutons du groupe
+    const allOpts = document.querySelectorAll(`#${qid} .opt`);
+    allOpts.forEach(opt => opt.disabled = true);
+    // Afficher temporairement un message d'attente
+    const waitDiv = document.getElementById(`wait${qid.slice(1)}`);
+    if (waitDiv) waitDiv.innerHTML = '<div class="timer-wait"><i class="ti ti-hourglass"></i> Analyse en cours (3s)...</div>';
+    // timer 3 secondes
+    const timerId = setTimeout(() => {
+      if (waitDiv) waitDiv.innerHTML = '';
+      const isCorrect = (idx === correctIdx);
+      const okFeedback = document.getElementById(`${qid}-ok`);
+      const koFeedback = document.getElementById(`${qid}-ko`);
+      if (isCorrect) {
+        if (okFeedback) okFeedback.style.display = 'block';
+        if (koFeedback) koFeedback.style.display = 'none';
+      } else {
+        if (koFeedback) koFeedback.style.display = 'block';
+        if (okFeedback) okFeedback.style.display = 'none';
+        // marquer la bonne réponse en vert
+        allOpts.forEach(opt => {
+          if (parseInt(opt.dataset.idx) === correctIdx) opt.classList.add('correct');
+        });
+        btn.classList.add('wrong');
+      }
+      // valider la section
+      const statusId = 'st' + sectionId.slice(1);
+      const badgeId = 'done' + sectionId.slice(1);
+      markSectionDone(sectionId, statusId, badgeId);
+      delete activeTimers[qid];
+    }, 3000);
+    activeTimers[qid] = timerId;
+  }
+
+  // Micro-lab : validation groupée avec délai avant de révéler toutes les corrections
+  function initMicroLab() {
+    const validateBtn = document.getElementById('validateMicroLabBtn');
+    if (!validateBtn) return;
+    validateBtn.addEventListener('click', () => {
+      if (sectionDone.s5) return;
+      validateBtn.disabled = true;
+      validateBtn.innerHTML = '<i class="ti ti-hourglass"></i> Vérification (3s)...';
+      const timerId = setTimeout(() => {
+        // Révéler toutes les corrections des scénarios
+        const reveals = document.querySelectorAll('#s5 .sc-reveal');
+        reveals.forEach(r => r.classList.add('show'));
+        validateBtn.innerHTML = '<i class="ti ti-circle-check"></i> Micro-lab validé';
+        // Marquer section 5 terminée
+        markSectionDone('s5', 'st5', 'done5');
+        validateBtn.disabled = false;
+      }, 3000);
+      activeTimers.microlab = timerId;
+    });
+  }
+
+  function initSection6() {
+    const btn = document.getElementById('completeSynthBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      if (sectionDone.s6) return;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ti ti-hourglass"></i> Finalisation (3s)...';
+      const timerId = setTimeout(() => {
+        markSectionDone('s6', 'st6', 'done6');
+        btn.innerHTML = '<i class="ti ti-circle-check"></i> Lab 1 terminé';
+        btn.disabled = false;
+      }, 3000);
+      activeTimers.synth = timerId;
+    });
+  }
+
+  // restore toggle section body manuel
+  window.toggleSectionBody = function(sectionId) {
+    const num = sectionId.slice(1);
+    const body = document.getElementById('b' + num);
+    const ch = document.getElementById('ch' + num);
+    if (body) {
+      body.classList.toggle('open');
+      if (ch) ch.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : '';
+    }
+  };
+
+  // populate static scenarios (copied from original but keep exact content)
+  function buildScenarios() {
+    const container = document.getElementById('scenariosContainer');
+    if (!container) return;
+    const scenariosHTML = [
+      {num:1, title:"Détection de fraude carte bancaire", desc:"Un réseau de paiement analyse chaque transaction en temps réel pour bloquer les opérations suspectes avant validation. 2 000 transactions par seconde, données structurées.", correct:"Vélocité (décision en ms) + Valeur (bloquer une fraude = gain direct) + Véracité (fausse alerte = coût client). Volume modéré, Variété faible."},
+      {num:2, title:"Reporting réglementaire Bâle IV", desc:"Une banque doit agréger l'ensemble de ses positions de crédit (50 millions de lignes) chaque fin de mois pour produire les rapports COREP. Délai T+1.", correct:"Volume (50M lignes) + Véracité (données certifiées) + Valeur (conformité). Vélocité modérée."},
+      {num:3, title:"Scoring crédit à la consommation", desc:"Un établissement analyse 500+ variables par demande (comportement transactionnel, historique, données externes) pour décider d'un crédit en moins de 5 minutes.", correct:"Variété (500+ variables) + Véracité + Valeur + Vélocité (décision <5 min). Volume significatif."},
+      {num:4, title:"Pricing assurance dynamique (télématique)", desc:"Un assureur collecte en continu les données de conduite (GPS, accéléromètre, caméra) de 500 000 véhicules pour ajuster les primes mensuellement.", correct:"Les 5V sont tous présents. Volume, Vélocité, Variété, Véracité, Valeur — cas Big Data complet."},
+      {num:5, title:"Archivage de contrats (back-office)", desc:"Un service juridique numérise et stocke 200 000 contrats PDF historiques pour consultation occasionnelle par les équipes conformité. Pas de traitement analytique prévu.", correct:"Ce scénario NE justifie PAS une architecture Big Data. 200 000 PDFs = quelques centaines de Go. Un serveur standard suffit. Piège classique."}
+    ];
+    container.innerHTML = scenariosHTML.map(sc => `
+      <div class="scenario">
+        <div class="sc-num">Scénario ${sc.num}</div>
+        <div class="sc-title">${sc.title}</div>
+        <div class="sc-desc">${sc.desc}</div>
+        <div class="v-checks">
+          <span class="vcheck" onclick="this.classList.toggle('sel')">Volume</span>
+          <span class="vcheck" onclick="this.classList.toggle('sel')">Vélocité</span>
+          <span class="vcheck" onclick="this.classList.toggle('sel')">Variété</span>
+          <span class="vcheck" onclick="this.classList.toggle('sel')">Véracité</span>
+          <span class="vcheck" onclick="this.classList.toggle('sel')">Valeur</span>
+        </div>
+        <button class="reveal-btn" onclick="document.getElementById('r${sc.num}').classList.toggle('show')"><i class="ti ti-eye"></i> Voir la correction</button>
+        <div class="sc-reveal" id="r${sc.num}"><strong>${sc.correct}</strong></div>
+      </div>
+    `).join('');
+  }
+
+  // initialisation séquentielle: afficher s1 seulement
+  function initSequential() {
+    buildScenarios();
+    showSectionOnly('s1');
+    // ouvrir body de s1 par défaut
+    const b1 = document.getElementById('b1');
+    const ch1 = document.getElementById('ch1');
+    if (b1 && !b1.classList.contains('open')) { b1.classList.add('open'); if(ch1) ch1.style.transform = 'rotate(180deg)'; }
+    setupQuizHandlers();
+    initMicroLab();
+    initSection6();
+  }
+  // clean timers on page unload (optional)
+  window.addEventListener('beforeunload', () => {
+    Object.values(activeTimers).forEach(t => clearTimeout(t));
+  });
+  initSequential();
+</script>
+</body>
+</html>

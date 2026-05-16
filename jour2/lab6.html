@@ -211,7 +211,7 @@
       <div class="info-box"><i class="ti ti-info-circle"></i><div>La table sera créée dans la base <strong>default</strong> sous le nom <strong>bank_transactions</strong>.</div></div>
       <div class="steps">
         <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Téléchargez le fichier CSV sur votre machine</div><div class="step-desc">Nommez-le <strong>bank_transactions.csv</strong> (colonnes : transaction_id, client_id, country, amount, transaction_type, risk_score).</div></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Dans Databricks : <strong>Data → Add Data → Upload File</strong></div><div class="step-desc">Glissez‑déposez le fichier. Une fois l’upload terminé, cliquez sur <strong>"Create Table"</strong>.</div></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Dans Databricks : <strong>Data ingestion→ File → Create or modify table→ upload</strong></div><div class="step-desc">Glissez‑déposez le fichier. Une fois l’upload terminé, cliquez sur <strong>"Create Table"</strong>.</div></div></div>
         <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Paramétrez la table</div><div class="step-desc">Base : <strong>default</strong> / Nom de table : <strong>bank_transactions</strong>. Laissez l’inférence de schéma.</div></div></div>
         <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Vérifiez avec Spark SQL (dans le notebook)</div></div></div>
       </div>
@@ -225,6 +225,9 @@
         <div style="font-family:'DM Mono',monospace;font-size:11px;">
           df = spark.read.csv("/FileStore/tables/bank_transactions.csv", header=True, inferSchema=True)<br>
           df.write.saveAsTable("default.bank_transactions")
+		  <br>ou bien<br>
+		  df = spark.read.table("workspace.default.bank_transactions")
+		  <br>df.show(5)<br>
         </div>
       </div>
       <button class="complete-btn" onclick="markDone('s3','done3','st3');updateProgress()"><i class="ti ti-circle-check"></i> Dataset importé</button>

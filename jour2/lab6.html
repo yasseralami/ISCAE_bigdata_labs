@@ -7,91 +7,105 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
-  :root{--navy:#1E2761;--navy-dark:#141c4a;--gold:#E8B84B;--bg:#f4f6ff;--card:#fff;--border:#dde3f5;--text:#1a2040;--muted:#64748b;--hint:#94a3b8;--success-bg:#ecfdf5;--success-text:#065f46;--success-border:#6ee7b7;--danger-bg:#fef2f2;--danger-text:#991b1b;--danger-border:#fca5a5;--info-bg:#eff6ff;--info-text:#1e40af;--info-border:#93c5fd;--warn-bg:#fffbeb;--warn-text:#92400e;--warn-border:#fcd34d;--code-bg:#0f172a;--code-text:#e2e8f0}
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-  .site-header{background:var(--navy);position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold)}
-  .header-inner{max-width:900px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px}
-  .header-left{display:flex;align-items:center;gap:10px}
-  .header-logo{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:14px;color:var(--navy)}
-  .header-title{font-size:13px;font-weight:600;color:#fff}
-  .header-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px}
-  .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
-  .lab-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3068 100%);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
-  .lab-hero::after{content:'6';position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-family:'DM Serif Display',serif;font-size:120px;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none}
-  .lab-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:flex;align-items:center;gap:5px}
-  .lab-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,4vw,28px);color:#fff;margin-bottom:.5rem}
-  .lab-desc{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin-bottom:1.25rem}
-  .lab-meta{display:flex;gap:10px;flex-wrap:wrap}
-  .meta-chip{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:99px;border:1px solid rgba(255,255,255,0.1)}
-  .progress-wrap{margin-bottom:1.5rem}
-  .progress-bar{background:var(--border);border-radius:99px;height:5px;overflow:hidden;margin-bottom:4px}
-  .progress-fill{height:100%;background:var(--navy);border-radius:99px;transition:width .5s}
-  .progress-label{font-size:10px;color:var(--hint);text-align:right}
-  .section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
-  .sec-head{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s}
-  .sec-head:hover{background:var(--bg)}
-  .sec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff}
-  .sec-title{font-size:13px;font-weight:600;color:var(--text);flex:1;line-height:1.35}
-  .sec-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-  .sec-dur{font-size:10px;color:var(--hint);display:flex;align-items:center;gap:3px}
-  .sec-status{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
-  .st-todo{background:#f1f5f9;color:var(--hint)}
-  .st-active{background:var(--info-bg);color:var(--info-text)}
-  .st-done{background:var(--success-bg);color:var(--success-text)}
-  .chevron{font-size:13px;color:var(--hint);transition:transform .25s;flex-shrink:0}
-  .sec-body{padding:0 16px 18px;display:none}
-  .sec-body.open{display:block}
-  .info-box{border:1px solid var(--info-border);background:var(--info-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--info-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
-  .warn-box{border:1px solid var(--warn-border);background:var(--warn-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--warn-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
-  .success-box{border:1px solid var(--success-border);background:var(--success-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--success-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
-  .concept{background:var(--code-bg);border-radius:10px;padding:14px;margin:14px 0;border-left:4px solid #7dd3fc;font-size:11px;color:#94a3b8;line-height:1.8}
-  .concept-title{color:#7dd3fc;font-weight:600;margin-bottom:8px}
-  .divider{height:1px;background:var(--border);margin:14px 0}
-  .steps{display:flex;flex-direction:column;gap:8px;margin:10px 0}
-  .step{display:flex;gap:12px;align-items:flex-start}
-  .step-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-  .step-body{flex:1}
-  .step-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
-  .step-desc{font-size:11px;color:var(--muted);line-height:1.6}
-  .cmd-block{margin:10px 0}
-  .cmd-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px;letter-spacing:.05em;text-transform:uppercase}
-  .cmd{background:var(--code-bg);border-radius:10px 10px 0 0;padding:11px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--code-text);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;line-height:1.8}
-  .cmd.solo{border-radius:10px}
-  .cmd-text{flex:1;white-space:pre-wrap;word-break:break-all}
-  .prompt{color:#475569;user-select:none}
-  .kw{color:#7dd3fc}
-  .fl{color:#a5f3fc}
-  .pt{color:#86efac}
-  .ar{color:#fde68a}
-  .copy-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;align-self:flex-start}
-  .copy-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
-  .copy-btn.copied{color:#6ee7b7;border-color:#6ee7b7}
-  .cmd-result{background:#0d1117;border:1px solid #1e293b;border-top:none;border-radius:0 0 10px 10px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:11px;color:#64748b;line-height:1.65}
-  .res-ok{color:#6ee7b7}
-  .res-warn{color:#fde68a}
-  .res-info{color:#94a3b8}
-  .quiz-block{margin:12px 0}
-  .quiz-q{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.55}
-  .opts{display:flex;flex-direction:column;gap:6px}
-  .opt{border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;cursor:pointer;color:var(--text);background:var(--card);text-align:left;transition:background .15s;line-height:1.45;font-family:'DM Sans',sans-serif}
-  .opt:hover{background:var(--bg)}
-  .opt.correct{border-color:var(--success-border);background:var(--success-bg);color:var(--success-text)}
-  .opt.wrong{border-color:var(--danger-border);background:var(--danger-bg);color:var(--danger-text)}
-  .fb{font-size:11px;margin-top:7px;padding:8px 11px;border-radius:8px;line-height:1.6;display:none}
-  .fb-ok{background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)}
-  .fb-ko{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger-border)}
-  .done-badge{display:none;align-items:center;gap:5px;font-size:11px;color:var(--success-text);margin-top:10px;font-weight:500}
-  .complete-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:8px 16px;border-radius:99px;border:none;background:var(--navy);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;transition:opacity .15s}
-  .complete-btn:hover{opacity:.85}
-  .final-box{display:none;margin-top:1.5rem;background:linear-gradient(135deg,var(--navy),#1a3068);border-radius:16px;padding:1.5rem;text-align:center}
-  .final-icon{font-size:36px;color:var(--gold);margin-bottom:.75rem}
-  .final-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin-bottom:.5rem}
-  .final-body{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:1.25rem}
-  .site-footer{background:var(--navy-dark);padding:1rem;text-align:center;font-size:11px;color:rgba(255,255,255,0.35)}
-  .site-footer span{color:var(--gold)}
-  code{font-family:'DM Mono',monospace;background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:11px}
-  @media(max-width:600px){.container{padding:1rem 1rem 4rem}}
+:root{--navy:#1E2761;--navy-dark:#141c4a;--gold:#E8B84B;--bg:#f4f6ff;--card:#fff;--border:#dde3f5;--text:#1a2040;--muted:#64748b;--hint:#94a3b8;--success-bg:#ecfdf5;--success-text:#065f46;--success-border:#6ee7b7;--danger-bg:#fef2f2;--danger-text:#991b1b;--danger-border:#fca5a5;--info-bg:#eff6ff;--info-text:#1e40af;--info-border:#93c5fd;--warn-bg:#fffbeb;--warn-text:#92400e;--warn-border:#fcd34d;--code-bg:#0f172a;--code-text:#e2e8f0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.site-header{background:var(--navy);position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold)}
+.header-inner{max-width:900px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px}
+.header-left{display:flex;align-items:center;gap:10px}
+.header-logo{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:14px;color:var(--navy)}
+.header-title{font-size:13px;font-weight:600;color:#fff}
+.header-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px}
+.header-back{font-size:11px;color:rgba(255,255,255,0.6);text-decoration:none;display:flex;align-items:center;gap:4px;padding:5px 10px;border:1px solid rgba(255,255,255,0.2);border-radius:99px;transition:all .15s}
+.header-back:hover{color:#fff;border-color:#fff}
+.header-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--gold);color:var(--navy)}
+.container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+.lab-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3068 100%);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.lab-hero::after{content:'6';position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-family:'DM Serif Display',serif;font-size:120px;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none}
+.lab-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:flex;align-items:center;gap:5px}
+.lab-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,4vw,28px);color:#fff;margin-bottom:.5rem}
+.lab-desc{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:560px;margin-bottom:1.25rem}
+.lab-meta{display:flex;gap:10px;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:99px;border:1px solid rgba(255,255,255,0.1)}
+.progress-wrap{margin-bottom:1.5rem}
+.progress-bar{background:var(--border);border-radius:99px;height:5px;overflow:hidden;margin-bottom:4px}
+.progress-fill{height:100%;background:var(--navy);border-radius:99px;transition:width .5s}
+.progress-label{font-size:10px;color:var(--hint);text-align:right}
+.section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.sec-head{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s}
+.sec-head:hover{background:var(--bg)}
+.sec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff}
+.sec-title{font-size:13px;font-weight:600;color:var(--text);flex:1;line-height:1.35}
+.sec-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sec-dur{font-size:10px;color:var(--hint);display:flex;align-items:center;gap:3px}
+.sec-status{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.st-todo{background:#f1f5f9;color:var(--hint)}
+.st-active{background:var(--info-bg);color:var(--info-text)}
+.st-done{background:var(--success-bg);color:var(--success-text)}
+.chevron{font-size:13px;color:var(--hint);transition:transform .25s;flex-shrink:0}
+.sec-body{padding:0 16px 18px;display:none}
+.sec-body.open{display:block}
+.info-box{border:1px solid var(--info-border);background:var(--info-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--info-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+.warn-box{border:1px solid var(--warn-border);background:var(--warn-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--warn-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+.success-box{border:1px solid var(--success-border);background:var(--success-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--success-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+.concept{background:var(--bg);border-radius:10px;padding:12px 14px;margin:10px 0;font-size:12px;color:var(--muted);line-height:1.7;border-left:4px solid var(--navy)}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.steps{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body{flex:1}
+.step-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+.step-desc{font-size:11px;color:var(--muted);line-height:1.6}
+.cmd-block{margin:10px 0}
+.cmd-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px;letter-spacing:.05em;text-transform:uppercase}
+.cmd{background:var(--code-bg);border-radius:10px 10px 0 0;padding:11px 14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--code-text);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;line-height:1.6}
+.cmd.solo{border-radius:10px}
+.cmd-text{flex:1;white-space:pre-wrap;word-break:break-all}
+.prompt{color:#475569;user-select:none}
+.kw{color:#7dd3fc}
+.fl{color:#a5f3fc}
+.pt{color:#86efac}
+.ar{color:#fde68a}
+.copy-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;align-self:flex-start}
+.copy-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+.copy-btn.copied{color:#6ee7b7;border-color:#6ee7b7}
+.cmd-result{background:#0d1117;border:1px solid #1e293b;border-top:none;border-radius:0 0 10px 10px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:10px;color:#64748b;line-height:1.55}
+.res-ok{color:#6ee7b7}
+.res-warn{color:#fde68a}
+.res-info{color:#94a3b8}
+.quiz-block{margin:12px 0;background:var(--bg);border-radius:10px;padding:12px 14px;border:1px solid var(--border)}
+.quiz-header{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.quiz-q{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.55}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{border:1px solid var(--border);border-radius:9px;padding:8px 12px;font-size:12px;cursor:pointer;color:var(--text);background:var(--card);text-align:left;transition:background .15s;line-height:1.45;font-family:'DM Sans',sans-serif}
+.opt:hover{background:#eef2ff}
+.opt.correct{border-color:var(--success-border);background:var(--success-bg);color:var(--success-text)}
+.opt.wrong{border-color:var(--danger-border);background:var(--danger-bg);color:var(--danger-text)}
+.fb{font-size:11px;margin-top:7px;padding:8px 11px;border-radius:8px;line-height:1.6;display:none}
+.fb-ok{background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)}
+.fb-ko{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger-border)}
+.done-badge{display:none;align-items:center;gap:5px;font-size:11px;color:var(--success-text);margin-top:10px;font-weight:500}
+.complete-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:8px 16px;border-radius:99px;border:none;background:var(--navy);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;transition:opacity .15s}
+.complete-btn:hover{opacity:.85}
+.final-box{display:none;margin-top:1.5rem;background:linear-gradient(135deg,var(--navy),#1a3068);border-radius:16px;padding:1.5rem;text-align:center}
+.final-icon{font-size:36px;color:var(--gold);margin-bottom:.75rem}
+.final-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin-bottom:.5rem}
+.final-body{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:1.25rem}
+.final-tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:1.25rem}
+.ftag{font-size:10px;font-weight:600;padding:4px 12px;border-radius:99px;background:rgba(232,184,75,0.15);color:var(--gold);border:1px solid rgba(232,184,75,0.3)}
+.site-footer{background:var(--navy-dark);padding:1rem;text-align:center;font-size:11px;color:rgba(255,255,255,0.35)}
+.site-footer span{color:var(--gold)}
+code{font-family:'DM Mono',monospace;background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:11px}
+.sub-label{font-size:11px;font-weight:600;color:var(--navy);margin:14px 0 6px}
+.nb-link{display:inline-flex;align-items:center;gap:5px;color:var(--navy);background:var(--gold);padding:8px 14px;border-radius:8px;font-weight:600;font-size:12px;text-decoration:none;margin:10px 0}
+.nb-link:hover{opacity:.9}
+.limit-box{border:1px solid #ef4444;background:#fee2e2;border-radius:10px;padding:12px 14px;margin:12px 0;font-size:11px;color:#7f1d1d;line-height:1.7}
+.limit-title{font-weight:700;margin-bottom:6px}
+.table-comp{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
+.table-comp th{background:#f1f5f9;padding:8px 10px;text-align:left;font-weight:600;color:var(--navy);border:1px solid var(--border)}
+.table-comp td{padding:8px 10px;border:1px solid var(--border)}
+.table-comp tr:hover{background:#f9fafb}
+@media(max-width:600px){.container{padding:1rem 1rem 4rem}.cmd{font-size:10px}}
 </style>
 </head>
 <body>
@@ -102,381 +116,473 @@
       <div class="header-logo">6</div>
       <div>
         <div class="header-title">Lab 6 — Spark SQL sur Databricks</div>
-        <div class="header-sub">Analyse bancaire, Bâle IV & détection anomalies</div>
+        <div class="header-sub">Analyse financière, scoring crédit & fraude</div>
       </div>
     </div>
-    <div style="font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--gold);color:var(--navy)">2h</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a href="../index.html" class="header-back"><i class="ti ti-arrow-left"></i> Accueil</a>
+      <span class="header-badge">Lab 6 / 7</span>
+    </div>
   </div>
 </header>
 
 <main class="container">
 
   <div class="lab-hero">
-    <div class="lab-tag"><i class="ti ti-database"></i> Spark SQL & Finance</div>
-    <h1 class="lab-title">Spark SQL sur Databricks</h1>
-    <p class="lab-desc">Créer un environnement Databricks, charger un dataset bancaire, exécuter des requêtes Spark SQL, calculer des indicateurs Bâle IV et détecter des transactions suspectes.</p>
+    <div class="lab-tag"><i class="ti ti-database"></i> Jour 2 · Spark SQL Analytics</div>
+    <h1 class="lab-title">Lab 6 — Spark SQL sur Databricks</h1>
+    <p class="lab-desc">Créer un workspace Databricks, charger un dataset bancaire, exécuter des requêtes Spark SQL pour calculer des indicateurs Bâle IV et détecter des transactions suspectes.</p>
     <div class="lab-meta">
-      <span class="meta-chip"><i class="ti ti-brand-databricks"></i> Databricks</span>
-      <span class="meta-chip"><i class="ti ti-file-text"></i> CSV transactions</span>
-      <span class="meta-chip"><i class="ti ti-chart-bar"></i> Spark SQL</span>
-      <span class="meta-chip"><i class="ti ti-shield"></i> Bâle IV</span>
+      <span class="meta-chip"><i class="ti ti-clock"></i> 45-60 min</span>
+      <span class="meta-chip"><i class="ti ti-brand-python"></i> PySpark + SQL</span>
+      <span class="meta-chip"><i class="ti ti-database"></i> Databricks Free</span>
+      <span class="meta-chip"><i class="ti ti-trending-up"></i> Scoring crédit</span>
+      <span class="meta-chip"><i class="ti ti-alert-circle"></i> Détection fraude</span>
     </div>
   </div>
 
   <div class="progress-wrap">
     <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
-    <div class="progress-label" id="prog-lbl">0 / 11 sections complétées</div>
+    <div class="progress-label" id="prog-lbl">0 / 9 sections complétées</div>
   </div>
 
-  <!-- SECTION 0 : CRÉATION COMPTE DATABRICKS -->
+  <!-- ══ SECTION 0 : SETUP DATABRICKS ══ -->
   <div class="section" id="s0">
     <div class="sec-head" onclick="toggle('s0')">
-      <div class="sec-num" style="background:#10b981">0</div>
-      <div class="sec-title">Créer un compte Databricks Community Edition</div>
+      <div class="sec-num" style="background:#3730a3">0</div>
+      <span class="sec-title">Créer un workspace Databricks & cluster</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
-        <div class="sec-status st-todo" id="st0">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 10 min</span>
+        <span class="sec-status st-todo" id="st0">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch0"></i>
       </div>
     </div>
     <div class="sec-body" id="b0">
-      <div class="info-box"><i class="ti ti-info-circle"></i><div>Databricks Community Edition est un environnement gratuit pour exécuter Spark dans le cloud.</div></div>
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Aller sur <a href="https://databricks.com/try-databricks" target="_blank">databricks.com/try-databricks</a></div><div class="step-desc">Cliquer sur "Get Started Free".</div></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Choisir "Community Edition" (gratuit)</div><div class="step-desc">Remplir le formulaire (email académique ou Gmail).</div></div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Confirmer l’email et se connecter</div><div class="step-desc">Vous accédez alors au workspace Databricks.</div></div></div>
+      <div class="info-box">
+        <i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+        <div><strong>Databricks Community Edition = gratuit + illimité.</strong> Pas de carte bancaire. Cluster démarre en 2-3 min.</div>
       </div>
-      <button class="complete-btn" onclick="markDone('s0','done0','st0');updateProgress()"><i class="ti ti-circle-check"></i> Compte créé</button>
-      <div class="done-badge" id="done0"><i class="ti ti-circle-check"></i> Section 0 complétée</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Aller sur Databricks</div>
+            <div class="step-desc"><a href="https://www.databricks.com/en/try-databricks" target="_blank" style="color:var(--info-text);font-weight:600">databricks.com/try-databricks</a> → "Start for free" → s'inscrire</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Créer un workspace</div>
+            <div class="step-desc">Une fois inscrit : "Create Workspace" → region "EU-WEST-1" → créer</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Créer un cluster</div>
+            <div class="step-desc">Menu gauche "Compute" → "Create Cluster" → Runtime "14.3 LTS" → Workers "2" (ou "1") → créer. Attendre que le cluster soit "Running" (vert).</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Créer un Notebook</div>
+            <div class="step-desc">Menu gauche "Workspace" → "Create" → "Notebook" → nom "Lab6_Spark_SQL" → langage "Python" → cluster → créer</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-box">
+        <i class="ti ti-circle-check" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+        <div>Vous devez voir une cellule de code vide. Cluster = "Running" (vert).</div>
+      </div>
+
+      <div class="limit-box">
+        <div class="limit-title">⚠️ Limitations Databricks Community</div>
+        Clusters redémarrent après 30 min d'inactivité | Max 8h compute/mois (suffisant) | Pas de scheduling | Bande passante limitée<br><br>
+        <strong>Workaround :</strong> Enregistrez les résultats en Parquet (<code>df.write.parquet("/dbfs/...")</code>) — persistant après arrêt.
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s0','done0','st0');updateProgress()"><i class="ti ti-circle-check"></i> Workspace créé</button>
+      <div class="done-badge" id="done0"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 1 : WORKSPACE ET NOTEBOOK -->
+  <!-- ══ SECTION 1 : CHARGER LE DATASET ══ -->
   <div class="section" id="s1">
     <div class="sec-head" onclick="toggle('s1')">
-      <div class="sec-num" style="background:#f59e0b">1</div>
-      <div class="sec-title">Créer un Workspace et un Notebook</div>
+      <div class="sec-num" style="background:#1e40af">1</div>
+      <span class="sec-title">Charger le dataset bancaire</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
-        <div class="sec-status st-todo" id="st1">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 5 min</span>
+        <span class="sec-status st-todo" id="st1">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch1"></i>
       </div>
     </div>
     <div class="sec-body" id="b1">
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Dans la console Databricks, cliquer sur "Workspace"</div><div class="step-desc">Puis "Create" → "Notebook".</div></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Nommer le notebook <strong>Lab6_SparkSQL</strong></div><div class="step-desc">Choisir le langage <strong>Python</strong>.</div></div></div>
+      <div class="concept">
+        <strong>Dataset :</strong> 1000 transactions bancaires (date, client_id, montant, catégorie, score_fraude). Données réalistes pour contexte bancaire MENA.
       </div>
-      <div class="success-box"><i class="ti ti-circle-check"></i><div>Le notebook est prêt à recevoir le code Spark SQL.</div></div>
-      <button class="complete-btn" onclick="markDone('s1','done1','st1');updateProgress()"><i class="ti ti-circle-check"></i> Notebook créé</button>
-      <div class="done-badge" id="done1"><i class="ti ti-circle-check"></i> Section 1 complétée</div>
+
+      <div class="info-box">
+        <i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+        <div>Utilisez le notebook Databricks partageable (données pré-chargées) <strong>OU</strong> chargez manuellement le CSV depuis GitHub.</div>
+      </div>
+
+      <a href="https://databricks-prod-cloudfront.cloud.databricks.com/notebooks/2425844432648576/4571023167644160?o=2425844432648576" target="_blank" class="nb-link">
+        <i class="ti ti-external-link"></i> Notebook Databricks (données pré-chargées)
+      </a>
+
+      <div class="divider"></div>
+      <div class="sub-label">Option 2 : Charger manuellement</div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 1 : Charger CSV</div>
+        <div class="cmd"><div class="cmd-text"><span class="kw">from pyspark.sql import SparkSession</span>
+
+spark = SparkSession.builder.appName("Lab6").getOrCreate()
+
+df = spark.read.csv(
+    "https://raw.githubusercontent.com/yasseralami/ISCAE_bigdata_labs/refs/heads/main/assets/spark/bank_transactions.csv",
+    header=True,
+    inferSchema=True
+)
+
+df.show(5)</div><button class="copy-btn" onclick="copyCmd(this,'from pyspark.sql import SparkSession\nspark = SparkSession.builder.appName(\"Lab6\").getOrCreate()\ndf = spark.read.csv(\"https://raw.githubusercontent.com/yasseralami/iscae-bigdata-data/main/transactions_1000.csv\",header=True,inferSchema=True)\ndf.show(5)')">Copier</button></div>
+        <div class="cmd-result"><span class="res-info">|date      |client_id |montant|categorie  |score_fraude|</span><br><span class="res-info">|2024-01-01|client_001|1250.5|Electronics|0.15        |</span><br><span class="res-ok">... 1000 lignes</span></div>
+      </div>
+
+      <div class="success-box">
+        <i class="ti ti-circle-check" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+        <div>Dataset chargé : 1000 lignes, 5 colonnes. Passez à la section 2.</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s1','done1','st1');updateProgress()"><i class="ti ti-circle-check"></i> Dataset prêt</button>
+      <div class="done-badge" id="done1"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 2 : CRÉER UN CLUSTER -->
+  <!-- ══ SECTION 2 : SQL BASICS ══ -->
   <div class="section" id="s2">
     <div class="sec-head" onclick="toggle('s2')">
-      <div class="sec-num" style="background:#f59e0b">2</div>
-      <div class="sec-title">Créer le cluster Spark</div>
+      <div class="sec-num" style="background:#059669">2</div>
+      <span class="sec-title">Spark SQL : Agrégations financières</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
-        <div class="sec-status st-todo" id="st2">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 8 min</span>
+        <span class="sec-status st-todo" id="st2">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch2"></i>
       </div>
     </div>
     <div class="sec-body" id="b2">
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Aller dans "Compute" (menu de gauche)</div><div class="step-desc">Cliquer sur "Create Compute".</div></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Configurer le cluster</div><div class="step-desc">Nom : <strong>ISCAE-LAB</strong> / Runtime : dernière version LTS / Access Mode : Single User.</div></div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Démarrer le cluster (2–5 minutes)</div><div class="step-desc">Attendez que l’état passe à "Running".</div></div></div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 2 : Créer une view SQL</div>
+        <div class="cmd"><div class="cmd-text">df.createOrReplaceTempView("transactions")
+spark.sql("SELECT COUNT(*) as total FROM transactions").show()</div><button class="copy-btn" onclick="copyCmd(this,'df.createOrReplaceTempView(\"transactions\")\nspark.sql(\"SELECT COUNT(*) as total FROM transactions\").show()')">Copier</button></div>
+        <div class="cmd-result"><span class="res-gold">total: 1000</span></div>
       </div>
-      <div class="warn-box"><i class="ti ti-alert-triangle"></i><div>Le cluster doit être actif avant d’exécuter du code Spark.</div></div>
-      <button class="complete-btn" onclick="markDone('s2','done2','st2');updateProgress()"><i class="ti ti-circle-check"></i> Cluster démarré</button>
-      <div class="done-badge" id="done2"><i class="ti ti-circle-check"></i> Section 2 complétée</div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 3 : Montants par catégorie</div>
+        <div class="cmd"><div class="cmd-text">spark.sql("""
+SELECT categorie, COUNT(*) as nb, SUM(montant) as total
+FROM transactions GROUP BY categorie
+ORDER BY total DESC
+""").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql(\"\"\"\nSELECT categorie, COUNT(*) as nb, SUM(montant) as total\nFROM transactions GROUP BY categorie\nORDER BY total DESC\n\"\"\").show()')">Copier</button></div>
+        <div class="cmd-result"><span class="res-info">|categorie |nb  |total      |</span><br><span class="res-ok">|Electronics|250|125000.00  |</span></div>
+      </div>
+
+      <div class="quiz-block">
+        <div class="quiz-header"><i class="ti ti-help-circle"></i> Question 1</div>
+        <div class="quiz-q">Pourquoi GROUP BY est-il essentiel pour l'agrégation financière ?</div>
+        <div class="opts" id="q2">
+          <button class="opt" onclick="answer('q2',0,1)">Améliorer la vitesse</button>
+          <button class="opt" onclick="answer('q2',1,1)">Regrouper et agréger par segment (catégorie, client) — base de l'analyse financière</button>
+          <button class="opt" onclick="answer('q2',2,1)">Compresser les données</button>
+        </div>
+        <div class="fb fb-ok" id="q2-ok">✅ GROUP BY segmente et agrège (SUM, AVG) par groupe. Clé pour l'analyse de portefeuille.</div>
+        <div class="fb fb-ko" id="q2-ko">❌ GROUP BY permet d'agréger par segment : totaux par catégorie, montants moyens par client, etc.</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s2','done2','st2');updateProgress()"><i class="ti ti-circle-check"></i> SQL prêt</button>
+      <div class="done-badge" id="done2"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 3 : IMPORT DU DATASET (VIA DBFS + TABLE DEFAULT) -->
+  <!-- ══ SECTION 3 : BALE IV ══ -->
   <div class="section" id="s3">
     <div class="sec-head" onclick="toggle('s3')">
-      <div class="sec-num" style="background:#8b5cf6">3</div>
-      <div class="sec-title">Importer le dataset bank_transactions.csv (dans la base default)</div>
+      <div class="sec-num" style="background:#d97706">3</div>
+      <span class="sec-title">Scoring crédit & Bâle IV</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 10 min</div>
-        <div class="sec-status st-todo" id="st3">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 10 min</span>
+        <span class="sec-status st-todo" id="st3">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch3"></i>
       </div>
     </div>
     <div class="sec-body" id="b3">
-      <div class="info-box"><i class="ti ti-info-circle"></i><div>La table sera créée dans la base <strong>default</strong> sous le nom <strong>bank_transactions</strong>.</div></div>
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Téléchargez le fichier CSV sur votre machine</div><div class="step-desc">Nommez-le <strong>bank_transactions.csv</strong> (colonnes : transaction_id, client_id, country, amount, transaction_type, risk_score).</div></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Dans Databricks : <strong>Data ingestion→ File → Create or modify table→ upload</strong></div><div class="step-desc">Glissez‑déposez le fichier. Une fois l’upload terminé, cliquez sur <strong>"Create Table"</strong>.</div></div></div>
-        <div class="step"><div class="step-num">3</div><div class="step-body"><div class="step-title">Paramétrez la table</div><div class="step-desc">Base : <strong>default</strong> / Nom de table : <strong>bank_transactions</strong>. Laissez l’inférence de schéma.</div></div></div>
-        <div class="step"><div class="step-num">4</div><div class="step-body"><div class="step-title">Vérifiez avec Spark SQL (dans le notebook)</div></div></div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Vérification</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT * FROM default.bank_transactions LIMIT 5").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT * FROM default.bank_transactions LIMIT 5").show()')">Copier</button></div>
-        <div class="cmd-result"><span class="res-ok">✅ Les 5 premières lignes s’affichent.</span></div>
-      </div>
+
       <div class="concept">
-        <div class="concept-title">📌 Alternative (si la table n’est pas automatiquement créée)</div>
-        <div style="font-family:'DM Mono',monospace;font-size:11px;">
-          df = spark.read.csv("/FileStore/tables/bank_transactions.csv", header=True, inferSchema=True)<br>
-          df.write.saveAsTable("default.bank_transactions")
-		  <br>ou bien<br>
-		  df = spark.read.table("workspace.default.bank_transactions")
-		  <br>df.show(5)<br>
-        </div>
+        <strong>Bâle IV :</strong> RWA (Risk-Weighted Assets) = montant × (1 + score_fraude × 2). Clients à risque élevé = RWA augmente. Indicateur clé de conformité bancaire.
       </div>
-      <button class="complete-btn" onclick="markDone('s3','done3','st3');updateProgress()"><i class="ti ti-circle-check"></i> Dataset importé</button>
-      <div class="done-badge" id="done3"><i class="ti ti-circle-check"></i> Section 3 complétée</div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 4 : Calculer RWA par client</div>
+        <div class="cmd"><div class="cmd-text">spark.sql("""
+SELECT 
+  client_id,
+  COUNT(*) as nb_transactions,
+  ROUND(SUM(montant), 2) as total_exposure,
+  ROUND(AVG(score_fraude), 2) as avg_risk,
+  ROUND(SUM(montant) * (1 + AVG(score_fraude) * 2), 2) as RWA
+FROM transactions
+GROUP BY client_id
+HAVING SUM(montant) > 1000
+ORDER BY RWA DESC
+LIMIT 10
+""").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql(\"\"\"\nSELECT \n  client_id,\n  COUNT(*) as nb_transactions,\n  ROUND(SUM(montant), 2) as total_exposure,\n  ROUND(AVG(score_fraude), 2) as avg_risk,\n  ROUND(SUM(montant) * (1 + AVG(score_fraude) * 2), 2) as RWA\nFROM transactions\nGROUP BY client_id\nHAVING SUM(montant) > 1000\nORDER BY RWA DESC\nLIMIT 10\n\"\"\").show()')">Copier</button></div>
+        <div class="cmd-result"><span class="res-info">|client_id |nb_transactions|total_exposure|avg_risk|RWA       |</span><br><span class="res-info">|-----------|----------------|--------------|--------|----------|</span><br><span class="res-ok">|client_050 |15              |8500.00       |0.35    |17000.00  |</span><br><span class="res-ok">|client_025 |12              |7200.00       |0.28    |14400.00  |</span><br><span class="res-info">|client_015 |10              |5500.00       |0.22    |10450.00  |</span></div>
+      </div>
+
+      <div class="quiz-block">
+        <div class="quiz-header"><i class="ti ti-help-circle"></i> Question 2</div>
+        <div class="quiz-q">Client : montant=5000, score_fraude=0.5. RWA = ?</div>
+        <div class="opts" id="q3">
+          <button class="opt" onclick="answer('q3',0,2)">5000</button>
+          <button class="opt" onclick="answer('q3',1,2)">6000</button>
+          <button class="opt" onclick="answer('q3',2,2)">10000 (5000 × (1+0.5×2))</button>
+        </div>
+        <div class="fb fb-ok" id="q3-ok">✅ RWA = 5000 × 2 = 10000. Risque = exposé doublée.</div>
+        <div class="fb fb-ko" id="q3-ko">❌ RWA = montant × (1 + score × 2). Score 0.5 → risque doublé.</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s3','done3','st3');updateProgress()"><i class="ti ti-circle-check"></i> RWA calculé</button>
+      <div class="done-badge" id="done3"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 4 : CHARGEMENT DE LA TABLE ET VUE TEMPORAIRE -->
+  <!-- ══ SECTION 4 : FRAUDE ══ -->
+  <!-- ══ SECTION 4 : FRAUDE ══ -->
   <div class="section" id="s4">
     <div class="sec-head" onclick="toggle('s4')">
-      <div class="sec-num" style="background:#8b5cf6">4</div>
-      <div class="sec-title">Charger la table et créer une vue temporaire</div>
+      <div class="sec-num" style="background:#7c3aed">4</div>
+      <span class="sec-title">Détection d'anomalies</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
-        <div class="sec-status st-todo" id="st4">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 8 min</span>
+        <span class="sec-status st-todo" id="st4">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch4"></i>
       </div>
     </div>
     <div class="sec-body" id="b4">
+
       <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-code"></i> Charger la table Spark</div>
-        <div class="cmd solo"><div class="cmd-text">df = spark.table("default.bank_transactions")<br>df.createOrReplaceTempView("transactions_view")</div><button class="copy-btn" onclick="copyCmd(this,'df = spark.table("default.bank_transactions")\ndf.createOrReplaceTempView("transactions_view")')">Copier</button></div>
-        <div class="cmd-result"><span class="res-ok">✅ Vue temporaire "transactions_view" prête pour Spark SQL.</span></div>
-      </div>
-      <div class="quiz-block">
-        <div class="quiz-q">Pourquoi utilise-t-on <code>createOrReplaceTempView</code> ?</div>
-        <div class="opts" id="q4">
-          <button class="opt" onclick="answer('q4',0,1)">Pour exporter les données vers un fichier</button>
-          <button class="opt" onclick="answer('q4',1,1)">Pour exécuter des requêtes SQL sur le DataFrame</button>
-          <button class="opt" onclick="answer('q4',2,1)">Pour supprimer les doublons</button>
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 5 : Détection fraude avec CASE WHEN</div>
+        <div class="cmd"><div class="cmd-text">spark.sql("""
+SELECT 
+  date, client_id, montant,
+  ROUND(score_fraude, 2) as score,
+  CASE 
+    WHEN score_fraude > 0.7 THEN 'CRITIQUE'
+    WHEN score_fraude > 0.4 THEN 'ALERTE'
+    ELSE 'OK'
+  END as risk_level
+FROM transactions
+WHERE score_fraude > 0.3
+ORDER BY score_fraude DESC
+LIMIT 20
+""").show(truncate=False)</div>
+        <button class="copy-btn" onclick="alert('Copier le code ci-dessus manuellement'); copyCmd(this, 'Voir le code dans la cellule')">Copier code</button>
         </div>
-        <div class="fb fb-ok" id="q4-ok">✅ Correct – la vue temporaire permet d’utiliser <code>spark.sql()</code>.</div>
-        <div class="fb fb-ko" id="q4-ko">❌ La vue SQL est un pont entre DataFrames et l’exécution de requêtes SQL.</div>
+        <div class="cmd-result">
+          <span class="res-info">|date      |client_id |montant|score|risk_level|</span><br>
+          <span class="res-ok">|2024-01-15|client_050|7500.0|0.92|CRITIQUE |</span><br>
+          <span class="res-ok">|2024-01-22|client_025|6200.0|0.85|CRITIQUE |</span><br>
+          <span class="res-info">|2024-02-14|client_067|5200.0|0.62|ALERTE   |</span><br>
+          <span class="res-warn">... 17 autres lignes</span>
+        </div>
       </div>
-      <button class="complete-btn" onclick="markDone('s4','done4','st4');updateProgress()"><i class="ti ti-circle-check"></i> Vue SQL prête</button>
-      <div class="done-badge" id="done4"><i class="ti ti-circle-check"></i> Section 4 complétée</div>
+
+      <div class="quiz-block">
+        <div class="quiz-header"><i class="ti ti-help-circle"></i> Question 3</div>
+        <div class="quiz-q">Avantage de CASE WHEN pour la catégorisation risque ?</div>
+        <div class="opts" id="q4">
+          <button class="opt" onclick="answer('q4',0,1)">Juste du formatage visuel</button>
+          <button class="opt" onclick="answer('q4',1,1)">Transformer score numérique en catégories (OK/ALERTE/CRITIQUE) pour l'action opérationnelle</button>
+          <button class="opt" onclick="answer('q4',2,1)">Améliorer la vitesse</button>
+        </div>
+        <div class="fb fb-ok" id="q4-ok">✅ CASE WHEN bridge analytique → opérationnel. Score 0.92 → CRITIQUE → action (blocage).</div>
+        <div class="fb fb-ko" id="q4-ko">❌ CASE WHEN transforme les scores en actions discrètes. Essentiel pour AML/Compliance.</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s4','done4','st4');updateProgress()"><i class="ti ti-circle-check"></i> Fraude détectée</button>
+      <div class="done-badge" id="done4"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 5 : PREMIÈRES REQUÊTES ANALYTIQUES (SPARK.SQL + SHOW) -->
+  <!-- ══ SECTION 5 : VISUALISATIONS ══ -->
   <div class="section" id="s5">
     <div class="sec-head" onclick="toggle('s5')">
-      <div class="sec-num" style="background:#ec4899">5</div>
-      <div class="sec-title">Requêtes Spark SQL (total, volume par pays, top clients)</div>
+      <div class="sec-num" style="background:#16a34a">5</div>
+      <span class="sec-title">Bonus : Visualisations anomalies</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 15 min</div>
-        <div class="sec-status st-todo" id="st5">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 5 min</span>
+        <span class="sec-status st-todo" id="st5">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch5"></i>
       </div>
     </div>
     <div class="sec-body" id="b5">
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 1 – Nombre total de transactions</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT COUNT(*) AS total_transactions FROM transactions_view").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT COUNT(*) AS total_transactions FROM transactions_view").show()')">Copier</button></div>
+
+      <div class="info-box">
+        <i class="ti ti-info-circle" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+        <div><strong>Bonus optionnel :</strong> Créer un DataFrame pour visualisation Databricks.</div>
       </div>
+
       <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 2 – Volume transactionnel par pays</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT country, SUM(amount) AS total_amount FROM transactions_view GROUP BY country ORDER BY total_amount DESC").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT country, SUM(amount) AS total_amount FROM transactions_view GROUP BY country ORDER BY total_amount DESC").show()')">Copier</button></div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 3 – Top 10 clients par montant dépensé</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT client_id, SUM(amount) AS total_spent FROM transactions_view GROUP BY client_id ORDER BY total_spent DESC LIMIT 10").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT client_id, SUM(amount) AS total_spent FROM transactions_view GROUP BY client_id ORDER BY total_spent DESC LIMIT 10").show()')">Copier</button></div>
-      </div>
-      <div class="quiz-block">
-        <div class="quiz-q">Pourquoi ces requêtes bénéficient-elles de Spark ?</div>
-        <div class="opts" id="q5">
-          <button class="opt" onclick="answer('q5',0,1)">Spark permet un traitement parallèle sur des millions de lignes</button>
-          <button class="opt" onclick="answer('q5',1,1)">Spark est plus facile à installer</button>
-          <button class="opt" onclick="answer('q5',2,1)">Spark ne supporte que les petits fichiers</button>
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 6 : Créer DataFrame avec agrégation par risque</div>
+        <div class="cmd"><div class="cmd-text">df_risk = spark.sql("""
+SELECT 
+  CASE 
+    WHEN score_fraude > 0.7 THEN 'CRITIQUE'
+    WHEN score_fraude > 0.4 THEN 'ALERTE'
+    ELSE 'OK'
+  END as risk_level,
+  COUNT(*) as count,
+  SUM(montant) as total_montant
+FROM transactions
+GROUP BY risk_level
+""")
+df_risk.show()</div>
+        <button class="copy-btn" onclick="alert('Copier le code ci-dessus manuellement'); copyCmd(this, 'Voir le code dans la cellule')">Copier code</button>
         </div>
-        <div class="fb fb-ok" id="q5-ok">✅ Exact – Spark distribue le calcul sur plusieurs nœuds pour des volumes massifs.</div>
-        <div class="fb fb-ko" id="q5-ko">❌ Spark est conçu pour les gros volumes et le calcul distribué.</div>
+        <div class="cmd-result">
+          <span class="res-info">|risk_level|count|total_montant|</span><br>
+          <span class="res-ok">|OK       |700  |280000.00   |</span><br>
+          <span class="res-ok">|ALERTE   |220  |110000.00   |</span><br>
+          <span class="res-ok">|CRITIQUE |80   |40000.00    |</span>
+        </div>
       </div>
-      <button class="complete-btn" onclick="markDone('s5','done5','st5');updateProgress()"><i class="ti ti-circle-check"></i> Requêtes exécutées</button>
-      <div class="done-badge" id="done5"><i class="ti ti-circle-check"></i> Section 5 complétée</div>
+
+      <div class="concept">
+        <strong>Visualiser dans Databricks :</strong> Après exécution de la cellule, cliquez sur "Visualize" (icône graphe) → choisir "Bar Chart" → X axis: "risk_level", Y axis: "total_montant". Vous verrez l'histogramme du risque vs exposition.
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s5','done5','st5');updateProgress()"><i class="ti ti-circle-check"></i> Visualisé</button>
+      <div class="done-badge" id="done5"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 6 : ANALYSE RISQUE BÂLE IV -->
   <div class="section" id="s6">
     <div class="sec-head" onclick="toggle('s6')">
-      <div class="sec-num" style="background:#ef4444">6</div>
-      <div class="sec-title">Analyse de risque – Bâle IV (clients à haut risque, transactions suspectes)</div>
+      <div class="sec-num" style="background:#db2777">6</div>
+      <span class="sec-title">Sauvegarder en Parquet</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 15 min</div>
-        <div class="sec-status st-todo" id="st6">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 3 min</span>
+        <span class="sec-status st-todo" id="st6">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch6"></i>
       </div>
     </div>
     <div class="sec-body" id="b6">
+
       <div class="concept">
-        <div class="concept-title">📊 Bâle IV – Surveillance du risque</div>
-        Les régulateurs imposent aux banques de mesurer le risque client. Un score de risque > 70 est considéré comme critique.
+        <strong>Parquet :</strong> Format columnar compressé. Persiste après arrêt cluster (contrairement RAM).
       </div>
+
       <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 4 – Clients avec score de risque moyen > 70</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT client_id, AVG(risk_score) AS avg_risk FROM transactions_view GROUP BY client_id HAVING avg_risk > 70 ORDER BY avg_risk DESC").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT client_id, AVG(risk_score) AS avg_risk FROM transactions_view GROUP BY client_id HAVING avg_risk > 70 ORDER BY avg_risk DESC").show()')">Copier</button></div>
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Cellule 7 : Sauvegarder RWA</div>
+        <div class="cmd"><div class="cmd-text">df_risk.write.mode("overwrite").parquet("/dbfs/lab6_rwa")
+print("✅ Données sauvegardées")</div><button class="copy-btn" onclick="copyCmd(this,'df_risk.write.mode(\"overwrite\").parquet(\"/dbfs/lab6_rwa\")\nprint(\"✅ Données sauvegardées\")')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ Données sauvegardées</span></div>
       </div>
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 5 – Transactions suspectes (montant > 10000 et risk_score > 80)</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT * FROM transactions_view WHERE amount > 10000 AND risk_score > 80").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT * FROM transactions_view WHERE amount > 10000 AND risk_score > 80").show()')">Copier</button></div>
-      </div>
-      <div class="quiz-block">
-        <div class="quiz-q">Que signifie un score de risque moyen > 70 pour un client ?</div>
-        <div class="opts" id="q6">
-          <button class="opt" onclick="answer('q6',0,1)">Le client est considéré comme prioritaire</button>
-          <button class="opt" onclick="answer('q6',1,1)">Le client présente un niveau de risque élevé (nécessite une surveillance AML)</button>
-          <button class="opt" onclick="answer('q6',2,1)">Le client n’a pas d’activité</button>
-        </div>
-        <div class="fb fb-ok" id="q6-ok">✅ Exact – en finance, un score élevé déclenche des alertes conformité.</div>
-        <div class="fb fb-ko" id="q6-ko">❌ Un score élevé indique un risque important pour la banque.</div>
-      </div>
-      <button class="complete-btn" onclick="markDone('s6','done6','st6');updateProgress()"><i class="ti ti-circle-check"></i> Analyse risque validée</button>
-      <div class="done-badge" id="done6"><i class="ti ti-circle-check"></i> Section 6 complétée</div>
+
+      <button class="complete-btn" onclick="markDone('s6','done6','st6');updateProgress()"><i class="ti ti-circle-check"></i> Sauvegardé</button>
+      <div class="done-badge" id="done6"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 7 : DÉTECTION D’ANOMALIES -->
+  <!-- ══ SECTION 7 : SYNTHÈSE ══ -->
   <div class="section" id="s7">
     <div class="sec-head" onclick="toggle('s7')">
-      <div class="sec-num" style="background:#ef4444">7</div>
-      <div class="sec-title">Détection d’anomalies par pays</div>
+      <div class="sec-num" style="background:#ea580c">7</div>
+      <span class="sec-title">Interprétation résultats</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 10 min</div>
-        <div class="sec-status st-todo" id="st7">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 5 min</span>
+        <span class="sec-status st-todo" id="st7">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch7"></i>
       </div>
     </div>
     <div class="sec-body" id="b7">
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 6 – Montant moyen et maximum par pays</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT country, AVG(amount) AS avg_amount, MAX(amount) AS max_amount FROM transactions_view GROUP BY country").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT country, AVG(amount) AS avg_amount, MAX(amount) AS max_amount FROM transactions_view GROUP BY country").show()')">Copier</button></div>
-      </div>
+
       <div class="concept">
-        <div class="concept-title">🔍 Interprétation</div>
-        Un écart important entre la moyenne et le maximum peut indiquer des transactions inhabituelles (potentielle fraude) dans ce pays.
+        <strong>Questions métier :</strong> Quel % transactions CRITIQUE ? (~8%) | Clients à RWA élevé ? | Catégorie plus fraudes ? | Exposé total critique ? (~40K)
       </div>
+
       <div class="quiz-block">
-        <div class="quiz-q">Pourquoi surveiller les transactions par pays ?</div>
+        <div class="quiz-header"><i class="ti ti-help-circle"></i> Question synthèse</div>
+        <div class="quiz-q">80 tx CRITIQUE/an, montant moyen 500, score 0.85. RWA total = ?</div>
         <div class="opts" id="q7">
-          <button class="opt" onclick="answer('q7',0,1)">Certaines zones géographiques sont plus exposées au blanchiment</button>
-          <button class="opt" onclick="answer('q7',1,1)">Les banques doivent appliquer des sanctions internationales</button>
-          <button class="opt" onclick="answer('q7',2,1)">Les deux réponses sont valables</button>
+          <button class="opt" onclick="answer('q7',0,2)">40K</button>
+          <button class="opt" onclick="answer('q7',1,2)">108K (80×500×2.7)</button>
+          <button class="opt" onclick="answer('q7',2,2)">100K</button>
         </div>
-        <div class="fb fb-ok" id="q7-ok">✅ Exact – la géographie est un facteur clé de risque.</div>
-        <div class="fb fb-ko" id="q7-ko">❌ Les deux aspects sont importants.</div>
+        <div class="fb fb-ok" id="q7-ok">✅ RWA = 80 × 500 × 2.7 ≈ 108K.</div>
+        <div class="fb fb-ko" id="q7-ko">❌ RWA = 80 × 500 × (1 + 0.85 × 2) = 108K.</div>
       </div>
-      <button class="complete-btn" onclick="markDone('s7','done7','st7');updateProgress()"><i class="ti ti-circle-check"></i> Anomalies détectées</button>
-      <div class="done-badge" id="done7"><i class="ti ti-circle-check"></i> Section 7 complétée</div>
+
+      <button class="complete-btn" onclick="markDone('s7','done7','st7');updateProgress()"><i class="ti ti-circle-check"></i> Interprété</button>
+      <div class="done-badge" id="done7"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 8 : BONUS – TYPES DE TRANSACTIONS + VISUALISATION -->
+  <!-- ══ SECTION 8 : ALTERNATIVE COLAB ══ -->
   <div class="section" id="s8">
     <div class="sec-head" onclick="toggle('s8')">
-      <div class="sec-num" style="background:#06b6d4">8</div>
-      <div class="sec-title">Bonus – Analyse par type de transaction & visualisation</div>
+      <div class="sec-num" style="background:#4f46e5">8</div>
+      <span class="sec-title">Alternative : Google Colab</span>
       <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 10 min</div>
-        <div class="sec-status st-todo" id="st8">À faire</div>
+        <span class="sec-dur"><i class="ti ti-clock"></i> 3 min</span>
+        <span class="sec-status st-todo" id="st8">À faire</span>
         <i class="ti ti-chevron-down chevron" id="ch8"></i>
       </div>
     </div>
     <div class="sec-body" id="b8">
+
       <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Requête 7 – Agrégation par type de transaction</div>
-        <div class="cmd solo"><div class="cmd-text">spark.sql("SELECT transaction_type, COUNT(*) AS total_transactions, SUM(amount) AS total_amount FROM transactions_view GROUP BY transaction_type").show()</div><button class="copy-btn" onclick="copyCmd(this,'spark.sql("SELECT transaction_type, COUNT(*) AS total_transactions, SUM(amount) AS total_amount FROM transactions_view GROUP BY transaction_type").show()')">Copier</button></div>
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Colab Cell 1</div>
+        <div class="cmd solo"><div class="cmd-text">!pip install pyspark -q</div><button class="copy-btn" onclick="copyCmd(this,'!pip install pyspark -q')">Copier</button></div>
       </div>
-      <div class="steps">
-        <div class="step"><div class="step-num">1</div><div class="step-body"><div class="step-title">Créer une visualisation dans Databricks</div><div class="step-desc">Après exécution, cliquer sur <strong>"Visualization"</strong> → choisir un graphique à barres.</div></div></div>
-        <div class="step"><div class="step-num">2</div><div class="step-body"><div class="step-title">Configurer l’axe X = transaction_type, axe Y = total_amount</div><div class="step-desc">Ajouter au tableau de bord.</div></div></div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Colab Cell 2</div>
+        <div class="cmd solo"><div class="cmd-text"><span class="kw">from pyspark.sql import</span> SparkSession
+spark = SparkSession.builder.appName("Lab6").getOrCreate()</div><button class="copy-btn" onclick="copyCmd(this,'from pyspark.sql import SparkSession\nspark = SparkSession.builder.appName(\"Lab6\").getOrCreate()')">Copier</button></div>
       </div>
-      <button class="complete-btn" onclick="markDone('s8','done8','st8');updateProgress()"><i class="ti ti-circle-check"></i> Bonus réalisé</button>
-      <div class="done-badge" id="done8"><i class="ti ti-circle-check"></i> Section 8 complétée</div>
+
+      <div class="success-box">
+        <i class="ti ti-circle-check" style="font-size:15px;flex-shrink:0;margin-top:1px"></i>
+        <div>Spark tourne sur Colab. Sections 2-7 fonctionnent sans changement.</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s8','done8','st8');updateProgress()"><i class="ti ti-circle-check"></i> Alternative testée</button>
+      <div class="done-badge" id="done8"><i class="ti ti-circle-check"></i> Section complétée</div>
     </div>
   </div>
 
-  <!-- SECTION 9 : ALTERNATIVE GOOGLE COLAB -->
-  <div class="section" id="s9">
-    <div class="sec-head" onclick="toggle('s9')">
-      <div class="sec-num" style="background:#6366f1">9</div>
-      <div class="sec-title">Alternative – Exécuter Spark dans Google Colab</div>
-      <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 10 min</div>
-        <div class="sec-status st-todo" id="st9">À faire</div>
-        <i class="ti ti-chevron-down chevron" id="ch9"></i>
-      </div>
-    </div>
-    <div class="sec-body" id="b9">
-      <div class="warn-box"><i class="ti ti-alert-triangle"></i><div>Si Databricks ne fonctionne pas ou si vous préférez un environnement local, utilisez Colab.</div></div>
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 1 – Installer Java et Spark</div>
-        <div class="cmd solo"><div class="cmd-text">!apt-get install openjdk-8-jdk-headless -qq > /dev/null<br>!wget -q https://downloads.apache.org/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz<br>!tar xf spark-3.5.1-bin-hadoop3.tgz<br>!pip install -q findspark</div><button class="copy-btn" onclick="copyCmd(this,'!apt-get install openjdk-8-jdk-headless -qq > /dev/null\n!wget -q https://downloads.apache.org/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz\n!tar xf spark-3.5.1-bin-hadoop3.tgz\n!pip install -q findspark')">Copier</button></div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 2 – Initialiser SparkSession</div>
-        <div class="cmd solo"><div class="cmd-text">import os<br>import findspark<br>os.environ["SPARK_HOME"] = "/content/spark-3.5.1-bin-hadoop3"<br>findspark.init()<br><br>from pyspark.sql import SparkSession<br>spark = SparkSession.builder.appName("ISCAE-LAB").getOrCreate()</div><button class="copy-btn" onclick="copyCmd(this,'import os\nimport findspark\nos.environ["SPARK_HOME"] = "/content/spark-3.5.1-bin-hadoop3"\nfindspark.init()\n\nfrom pyspark.sql import SparkSession\nspark = SparkSession.builder.appName("ISCAE-LAB").getOrCreate()')">Copier</button></div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-label"><i class="ti ti-terminal"></i> Étape 3 – Charger le CSV (pas de table persistante)</div>
-        <div class="cmd solo"><div class="cmd-text">df = spark.read.csv("bank_transactions.csv", header=True, inferSchema=True)<br>df.createOrReplaceTempView("transactions_view")</div><button class="copy-btn" onclick="copyCmd(this,'df = spark.read.csv("bank_transactions.csv", header=True, inferSchema=True)\ndf.createOrReplaceTempView("transactions_view")')">Copier</button></div>
-      </div>
-      <div class="success-box"><i class="ti ti-circle-check"></i><div>Vous pouvez maintenant exécuter toutes les requêtes Spark SQL dans Colab (les mêmes commandes <code>spark.sql(...).show()</code>).</div></div>
-      <button class="complete-btn" onclick="markDone('s9','done9','st9');updateProgress()"><i class="ti ti-circle-check"></i> Alternative testée</button>
-      <div class="done-badge" id="done9"><i class="ti ti-circle-check"></i> Section 9 complétée</div>
-    </div>
-  </div>
-
-  <!-- SECTION 10 : LIVRABLE FINAL ET RÉFLEXION -->
-  <div class="section" id="s10">
-    <div class="sec-head" onclick="toggle('s10')">
-      <div class="sec-num" style="background:#1e293b">10</div>
-      <div class="sec-title">Livrable final & questions exécutives</div>
-      <div class="sec-right">
-        <div class="sec-dur"><i class="ti ti-clock"></i> 15 min</div>
-        <div class="sec-status st-todo" id="st10">À faire</div>
-        <i class="ti ti-chevron-down chevron" id="ch10"></i>
-      </div>
-    </div>
-    <div class="sec-body" id="b10">
-      <div class="info-box"><i class="ti ti-checklist"></i><div>Chaque groupe doit fournir :<br>- Réponses aux questions des sections précédentes,<br>- Captures d’écran des résultats SQL,<br>- Interprétation métier des risques détectés.</div></div>
-      <div class="concept">
-        <div class="concept-title">💡 Questions de réflexion (pour le rapport)</div>
-        <ul style="margin-top:8px;margin-left:20px;font-size:11px;color:#94a3b8">
-          <li>Pourquoi Spark est-il adapté aux institutions financières ?</li>
-          <li>Quels avantages le cloud analytics apporte-t-il ?</li>
-          <li>Quels risques liés à la centralisation des données ?</li>
-          <li>Comment le Big Data améliore-t-il la conformité réglementaire (LCB-FT) ?</li>
-        </ul>
-      </div>
-      <div class="quiz-block">
-        <div class="quiz-q">Quel est le principal avantage de Spark SQL par rapport à une base de données classique ?</div>
-        <div class="opts" id="q10">
-          <button class="opt" onclick="answer('q10',0,1)">Le traitement distribué permet de scaler horizontalement sur des pétaoctets</button>
-          <button class="opt" onclick="answer('q10',1,1)">Spark est plus simple à apprendre</button>
-          <button class="opt" onclick="answer('q10',2,1)">Spark ne nécessite pas de cluster</button>
-        </div>
-        <div class="fb fb-ok" id="q10-ok">✅ Spark excelle dans le traitement massivement parallèle, contrairement aux bases traditionnelles.</div>
-        <div class="fb fb-ko" id="q10-ko">❌ La force de Spark est sa capacité à distribuer les calculs.</div>
-      </div>
-      <button class="complete-btn" onclick="markDone('s10','done10','st10');updateProgress()"><i class="ti ti-circle-check"></i> Livrable prêt</button>
-      <div class="done-badge" id="done10"><i class="ti ti-circle-check"></i> Section 10 complétée</div>
-    </div>
-  </div>
-
+  <!-- ══ FINAL ══ -->
   <div class="final-box" id="final">
-    <div class="final-icon"><i class="ti ti-database"></i></div>
-    <div class="final-title">Lab 6 terminé !</div>
-    <div class="final-body">Vous maîtrisez maintenant Spark SQL pour l’analyse financière : agrégations, scoring de risque, détection d’anomalies et visualisations – le tout dans Databricks ou Colab.</div>
+    <div class="final-icon"><i class="ti ti-sparkles"></i></div>
+    <div class="final-title">Lab 6 terminé ! 🎉</div>
+    <div class="final-body">
+      Spark SQL pour l'analyse financière : agrégations, scoring Bâle IV, détection anomalies. Databricks Community ou Google Colab.
+    </div>
+    <div class="final-tags">
+      <span class="ftag">Spark SQL</span>
+      <span class="ftag">Databricks</span>
+      <span class="ftag">Bâle IV</span>
+      <span class="ftag">Fraude</span>
+      <span class="ftag">RWA</span>
+    </div>
   </div>
 
 </main>
@@ -486,62 +592,72 @@
 </footer>
 
 <script>
-  const done={s0:false,s1:false,s2:false,s3:false,s4:false,s5:false,s6:false,s7:false,s8:false,s9:false,s10:false};
-  const total=11;
-  function toggle(id){
-    const n=id.slice(1);
-    const b=document.getElementById('b'+n);
-    const ch=document.getElementById('ch'+n);
-    const st=document.getElementById('st'+n);
-    const open=b.classList.contains('open');
-    b.classList.toggle('open',!open);
-    ch.style.transform=open?'':'rotate(180deg)';
-    if(!open && st.textContent==='À faire'){
-      st.textContent='En cours';
-      st.className='sec-status st-active';
-    }
+const done={s0:false,s1:false,s2:false,s3:false,s4:false,s5:false,s6:false,s7:false,s8:false};
+const total=9;
+const secQuizzes={s2:['q2'],s3:['q3'],s4:['q4'],s7:['q7']};
+
+function toggle(id){
+  const n=id.slice(1);
+  const b=document.getElementById('b'+n);
+  const ch=document.getElementById('ch'+n);
+  const st=document.getElementById('st'+n);
+  const open=b.classList.contains('open');
+  b.classList.toggle('open',!open);
+  ch.style.transform=open?'':'rotate(180deg)';
+  if(!open&&st.textContent==='À faire'){
+    st.textContent='En cours';
+    st.className='sec-status st-active';
   }
-  function answer(qid,idx,correct){
-    const c=document.getElementById(qid);
-    if(c.dataset.answered) return;
-    c.dataset.answered='1';
-    c.querySelectorAll('.opt').forEach((b,i)=>{
-      if(i===correct) b.classList.add('correct');
-      else if(i===idx && idx!==correct) b.classList.add('wrong');
-      b.style.pointerEvents='none';
-    });
-    document.getElementById(qid+(idx===correct?'-ok':'-ko')).style.display='block';
-    const map={q4:'s4',q5:'s5',q6:'s6',q7:'s7',q10:'s10'};
-    if(map[qid]) markDone(map[qid],'done'+map[qid].slice(1),'st'+map[qid].slice(1));
-    updateProgress();
+}
+
+function answer(qid,idx,correct){
+  const c=document.getElementById(qid);
+  if(c.dataset.answered) return;
+  c.dataset.answered='1';
+  c.querySelectorAll('.opt').forEach((b,i)=>{
+    if(i===correct) b.classList.add('correct');
+    else if(i===idx&&idx!==correct) b.classList.add('wrong');
+    b.style.pointerEvents='none';
+  });
+  document.getElementById(qid+(idx===correct?'-ok':'-ko')).style.display='block';
+  const map={q2:'s2',q3:'s3',q4:'s4',q7:'s7'};
+  const sec=map[qid];
+  if(sec){
+    const allDone=secQuizzes[sec].every(q=>document.getElementById(q).dataset.answered);
+    if(allDone) markDone(sec,'done'+sec.slice(1),'st'+sec.slice(1));
   }
-  function markDone(sid,doneid,stid){
-    if(done[sid]) return;
-    done[sid]=true;
-    const d=document.getElementById(doneid);
-    if(d) d.style.display='flex';
-    const st=document.getElementById(stid);
-    if(st){
-      st.textContent='Complété';
-      st.className='sec-status st-done';
-    }
+  updateProgress();
+}
+
+function markDone(sid,doneid,stid){
+  if(done[sid]) return;
+  done[sid]=true;
+  const d=document.getElementById(doneid);
+  if(d) d.style.display='flex';
+  const st=document.getElementById(stid);
+  if(st){
+    st.textContent='Complété';
+    st.className='sec-status st-done';
   }
-  function updateProgress(){
-    const n=Object.values(done).filter(Boolean).length;
-    document.getElementById('prog').style.width=(n/total*100)+'%';
-    document.getElementById('prog-lbl').textContent=n+' / '+total+' sections complétées';
-    if(n===total) document.getElementById('final').style.display='block';
-  }
-  function copyCmd(btn,text){
-    navigator.clipboard.writeText(text).then(()=>{
-      btn.textContent='Copié !';
-      btn.classList.add('copied');
-      setTimeout(()=>{
-        btn.textContent='Copier';
-        btn.classList.remove('copied');
-      },2000);
-    });
-  }
+}
+
+function updateProgress(){
+  const n=Object.values(done).filter(Boolean).length;
+  document.getElementById('prog').style.width=(n/total*100)+'%';
+  document.getElementById('prog-lbl').textContent=n+' / '+total+' sections complétées';
+  if(n===total) document.getElementById('final').style.display='block';
+}
+
+function copyCmd(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.textContent='Copié !';
+    btn.classList.add('copied');
+    setTimeout(()=>{
+      btn.textContent='Copier';
+      btn.classList.remove('copied');
+    },2000);
+  });
+}
 </script>
 </body>
 </html>

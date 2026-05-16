@@ -399,7 +399,7 @@
       </div>
       <div class="cmd-block">
         <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
-        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">status</span> <span class="pt">/user/root</span> <span class="pt">alice.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar status /user/root alice.txt')">Copier</button></div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">status</span> <span class="pt">/user/root</span> <span class="pt">alice.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar /shared_volume/hadoop-hdfs-app.jar status /user/root alice.txt')">Copier</button></div>
         <div class="cmd-result">
           <span class="res-ok">✅ File found: /user/root/alice.txt</span><br>
           <span class="res-info">Owner: root, Group: root, Size: 152345 bytes, Replication: 3, Permission: rw-r--r--, Modification time: 2025-03-27 10:23:45</span>
@@ -413,7 +413,7 @@
       </div>
       <div class="cmd-block">
         <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
-        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">info</span> <span class="pt">/user/root</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar info /user/root purchases.txt')">Copier</button></div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">info</span> <span class="pt">/user/root</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar /shared_volume/hadoop-hdfs-app.jar info /user/root purchases.txt')">Copier</button></div>
         <div class="cmd-result">
           <span class="res-info">Block 1: 192.168.96.2:50010 (cluster-slave1), 192.168.96.3:50010 (cluster-slave2), 192.168.96.4:50010 (cluster-master)</span><br>
           <span class="res-info">Block 2: 192.168.96.3:50010 (cluster-slave2), 192.168.96.2:50010 (cluster-slave1), 192.168.96.4:50010 (cluster-master)</span><br>
@@ -428,7 +428,7 @@
       </div>
       <div class="cmd-block">
         <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
-        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">read</span> <span class="pt">/user/root</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar read /user/root purchases.txt')">Copier</button></div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">read</span> <span class="pt">/user/root</span> <span class="pt">purchases.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar /shared_volume/hadoop-hdfs-app.jar read /user/root purchases.txt')">Copier</button></div>
         <div class="cmd-result">
           <span class="res-info">--- Début du fichier ---</span><br>
           date,product,amount,category<br>
@@ -446,7 +446,7 @@
       </div>
       <div class="cmd-block">
         <div class="cmd-label"><i class="ti ti-terminal"></i> Commande</div>
-        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">write</span> <span class="pt">/user/root</span> <span class="pt">hello.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar hadoop-hdfs-app.jar write /user/root hello.txt')">Copier</button></div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt"># </span><span class="kw">hadoop jar</span> <span class="ar">hadoop-hdfs-app.jar</span> <span class="fl">write</span> <span class="pt">/user/root</span> <span class="pt">hello.txt</span></div><button class="copy-btn" onclick="copyCmd(this,'hadoop jar /shared_volume/hadoop-hdfs-app.jar write /user/root hello.txt')">Copier</button></div>
         <div class="cmd-result">
           <span class="res-ok">✅ File created: /user/root/hello.txt</span><br>
           <span class="res-info">Content written: "Hello from Hadoop Java API !"</span>

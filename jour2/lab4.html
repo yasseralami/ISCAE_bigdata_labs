@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 4 — Pipeline Kafka Finance AML | ISCAE 2025-2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#1E2761;--navy-dark:#141c4a;--gold:#E8B84B;--bg:#f4f6ff;--card:#fff;--border:#dde3f5;--text:#1a2040;--muted:#64748b;--hint:#94a3b8;--success-bg:#ecfdf5;--success-text:#065f46;--success-border:#6ee7b7;--danger-bg:#fef2f2;--danger-text:#991b1b;--danger-border:#fca5a5;--info-bg:#eff6ff;--info-text:#1e40af;--info-border:#93c5fd;--warn-bg:#fffbeb;--warn-text:#92400e;--warn-border:#fcd34d;--code-bg:#0f172a;--code-text:#e2e8f0}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .site-header{background:var(--navy);position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gold)}
+  .header-inner{max-width:900px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px}
+  .header-left{display:flex;align-items:center;gap:10px}
+  .header-logo{width:30px;height:30px;background:var(--gold);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:14px;color:var(--navy)}
+  .header-title{font-size:13px;font-weight:600;color:#fff}
+  .header-sub{font-size:10px;color:rgba(255,255,255,0.5);margin-top:1px}
+  .container{max-width:900px;margin:0 auto;padding:2rem 1.5rem 5rem}
+  .lab-hero{background:linear-gradient(135deg,var(--navy) 0%,#1a3068 100%);border-radius:16px;padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+  .lab-hero::after{content:'4';position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);font-family:'DM Serif Display',serif;font-size:120px;color:rgba(255,255,255,0.04);line-height:1;pointer-events:none}
+  .lab-tag{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem;display:flex;align-items:center;gap:5px}
+  .lab-title{font-family:'DM Serif Display',serif;font-size:clamp(20px,4vw,28px);color:#fff;margin-bottom:.5rem}
+  .lab-desc{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;max-width:520px;margin-bottom:1.25rem}
+  .lab-meta{display:flex;gap:10px;flex-wrap:wrap}
+  .meta-chip{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);padding:4px 10px;border-radius:99px;border:1px solid rgba(255,255,255,0.1)}
+  .progress-wrap{margin-bottom:1.5rem}
+  .progress-bar{background:var(--border);border-radius:99px;height:5px;overflow:hidden;margin-bottom:4px}
+  .progress-fill{height:100%;background:var(--navy);border-radius:99px;transition:width .5s}
+  .progress-label{font-size:10px;color:var(--hint);text-align:right}
+  .section{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+  .sec-head{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s}
+  .sec-head:hover{background:var(--bg)}
+  .sec-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff}
+  .sec-title{font-size:13px;font-weight:600;color:var(--text);flex:1;line-height:1.35}
+  .sec-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+  .sec-dur{font-size:10px;color:var(--hint);display:flex;align-items:center;gap:3px}
+  .sec-status{font-size:10px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+  .st-todo{background:#f1f5f9;color:var(--hint)}
+  .st-active{background:var(--info-bg);color:var(--info-text)}
+  .st-done{background:var(--success-bg);color:var(--success-text)}
+  .chevron{font-size:13px;color:var(--hint);transition:transform .25s;flex-shrink:0}
+  .sec-body{padding:0 16px 18px;display:none}
+  .sec-body.open{display:block}
+  .context-box{background:linear-gradient(135deg,rgba(236,72,153,0.1) 0%,rgba(244,114,182,0.1) 100%);border-radius:12px;padding:16px;margin-bottom:16px;border-left:4px solid #ec4899}
+  .context-title{font-size:13px;font-weight:600;color:#be123c;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .objectives-box{background:linear-gradient(135deg,rgba(59,130,246,0.1) 0%,rgba(147,197,253,0.1) 100%);border-radius:12px;padding:16px;margin-bottom:16px;border-left:4px solid #3b82f6}
+  .objectives-title{font-size:13px;font-weight:600;color:#1e40af;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+  .obj-item{display:flex;gap:8px;font-size:12px;color:#0f172a;margin-bottom:8px}
+  .obj-check{color:#065f46;font-weight:600}
+  .info-box{border:1px solid var(--info-border);background:var(--info-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--info-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+  .warn-box{border:1px solid var(--warn-border);background:var(--warn-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--warn-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+  .success-box{border:1px solid var(--success-border);background:var(--success-bg);border-radius:10px;padding:10px 13px;margin:10px 0;font-size:12px;color:var(--success-text);line-height:1.65;display:flex;gap:8px;align-items:flex-start}
+  .concept{background:var(--code-bg);border-radius:10px;padding:14px;margin:14px 0;border-left:4px solid #7dd3fc;font-size:11px;color:#94a3b8;line-height:1.8}
+  .concept-title{color:#7dd3fc;font-weight:600;margin-bottom:8px}
+  .divider{height:1px;background:var(--border);margin:14px 0}
+  .steps{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+  .step{display:flex;gap:12px;align-items:flex-start}
+  .step-num{width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .step-body{flex:1}
+  .step-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:3px}
+  .step-desc{font-size:11px;color:var(--muted);line-height:1.6}
+  .cmd-block{margin:10px 0}
+  .cmd-label{font-size:10px;font-weight:600;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px;letter-spacing:.05em;text-transform:uppercase}
+  .cmd{background:var(--code-bg);border-radius:10px 10px 0 0;padding:11px 14px;font-family:'DM Mono',monospace;font-size:12px;color:var(--code-text);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;line-height:1.8}
+  .cmd.solo{border-radius:10px}
+  .cmd-text{flex:1;white-space:pre-wrap;word-break:break-all}
+  .prompt{color:#475569;user-select:none}
+  .kw{color:#7dd3fc}
+  .fl{color:#a5f3fc}
+  .pt{color:#86efac}
+  .ar{color:#fde68a}
+  .copy-btn{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);border-radius:6px;padding:3px 8px;font-size:10px;cursor:pointer;flex-shrink:0;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;align-self:flex-start}
+  .copy-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+  .copy-btn.copied{color:#6ee7b7;border-color:#6ee7b7}
+  .cmd-result{background:#0d1117;border:1px solid #1e293b;border-top:none;border-radius:0 0 10px 10px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:11px;color:#64748b;line-height:1.65}
+  .res-ok{color:#6ee7b7}
+  .res-warn{color:#fde68a}
+  .res-info{color:#94a3b8}
+  .quiz-block{margin:12px 0}
+  .quiz-q{font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;line-height:1.55}
+  .opts{display:flex;flex-direction:column;gap:6px}
+  .opt{border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;cursor:pointer;color:var(--text);background:var(--card);text-align:left;transition:background .15s;line-height:1.45;font-family:'DM Sans',sans-serif}
+  .opt:hover{background:var(--bg)}
+  .opt.correct{border-color:var(--success-border);background:var(--success-bg);color:var(--success-text)}
+  .opt.wrong{border-color:var(--danger-border);background:var(--danger-bg);color:var(--danger-text)}
+  .fb{font-size:11px;margin-top:7px;padding:8px 11px;border-radius:8px;line-height:1.6;display:none}
+  .fb-ok{background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)}
+  .fb-ko{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger-border)}
+  .done-badge{display:none;align-items:center;gap:5px;font-size:11px;color:var(--success-text);margin-top:10px;font-weight:500}
+  .complete-btn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:8px 16px;border-radius:99px;border:none;background:var(--navy);color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;transition:opacity .15s}
+  .complete-btn:hover{opacity:.85}
+  .final-box{display:none;margin-top:1.5rem;background:linear-gradient(135deg,var(--navy),#1a3068);border-radius:16px;padding:1.5rem;text-align:center}
+  .final-icon{font-size:36px;color:var(--gold);margin-bottom:.75rem}
+  .final-title{font-family:'DM Serif Display',serif;font-size:22px;color:#fff;margin-bottom:.5rem}
+  .final-body{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:1.25rem}
+  .pb{display:inline-block;background:var(--info-bg);color:var(--info-text);font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;font-family:'DM Mono',monospace}
+  .site-footer{background:var(--navy-dark);padding:1rem;text-align:center;font-size:11px;color:rgba(255,255,255,0.35)}
+  .site-footer span{color:var(--gold)}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-logo">4</div>
+      <div>
+        <div class="header-title">Lab 4 — Pipeline Kafka Finance AML</div>
+        <div class="header-sub">Production-ready streaming avec détection fraude temps-réel</div>
+      </div>
+    </div>
+    <div style="font-size:10px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--gold);color:var(--navy)">45 min</div>
+  </div>
+</header>
+
+<main class="container">
+
+  <div class="lab-hero">
+    <div class="lab-tag"><i class="ti ti-flame"></i> Streaming avancé</div>
+    <h1 class="lab-title">Pipeline Kafka Finance AML</h1>
+    <p class="lab-desc">Construire un système de détection fraude temps-réel : simulateur de transactions (500 tx/sec), consumer avec filtrage AML (Anti-Money Laundering), visualisation Kafka-UI, et monitoring production.</p>
+    <div class="lab-meta">
+      <span class="meta-chip"><i class="ti ti-database"></i> Kafka streaming</span>
+      <span class="meta-chip"><i class="ti ti-shield-check"></i> AML compliance</span>
+      <span class="meta-chip"><i class="ti ti-gauge"></i> 500 tx/sec</span>
+      <span class="meta-chip"><i class="ti ti-layout-grid"></i> Kafka-UI monitoring</span>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+    <div class="progress-label" id="prog-lbl">0 / 6 sections complétées</div>
+  </div>
+
+  <!-- SECTION 0 -->
+  <div class="section">
+    <div class="sec-head" onclick="toggle('s0')">
+      <div class="sec-num" style="background:#06b6d4">0</div>
+      <div class="sec-title">Réutiliser Codespace du Lab 2</div>
+      <div class="sec-right">
+        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
+        <div class="sec-status st-todo" id="st0">À faire</div>
+        <i class="ti ti-chevron-down chevron" id="ch0"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b0">
+      <div class="info-box">
+        <i class="ti ti-info-circle"></i>
+        <div>Ne créez pas un nouveau Codespace. Ouvrez celui du Lab 2 qui contient docker-compose, start-kafka-zookeeper.sh, et Kafka-UI.</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Ouvrir le Codespace Lab 2</div>
+            <div class="step-desc">GitHub → Code → Codespaces → Ouvrir le Codespace existant</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Vérifier docker-compose</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">docker-compose</span> <span class="fl">ps</span></div><button class="copy-btn" onclick="copyCmd(this,'docker-compose ps')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ Tous les services du Lab 2 actifs</span></div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s0','done0','st0');updateProgress()"><i class="ti ti-circle-check"></i> Codespace prêt</button>
+      <div class="done-badge" id="done0"><i class="ti ti-circle-check"></i> Section 0 complétée</div>
+    </div>
+  </div>
+
+  <!-- SECTION 1 -->
+  <div class="section">
+    <div class="sec-head" onclick="toggle('s1')">
+      <div class="sec-num" style="background:#06b6d4">1</div>
+      <div class="sec-title">Démarrer Kafka et Zookeeper</div>
+      <div class="sec-right">
+        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
+        <div class="sec-status st-todo" id="st1">À faire</div>
+        <i class="ti ti-chevron-down chevron" id="ch1"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b1">
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Lancer le script</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">./start-kafka-zookeeper.sh</span></div><button class="copy-btn" onclick="copyCmd(this,'./start-kafka-zookeeper.sh')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ Zookeeper started<br/>✅ Kafka started</span></div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Vérifier avec jps</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">jps</span></div><button class="copy-btn" onclick="copyCmd(this,'jps')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ QuorumPeerMain (Zookeeper)<br/>✅ Kafka<br/>✅ DataNode (Hadoop)</span></div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s1','done1','st1');updateProgress()"><i class="ti ti-circle-check"></i> Kafka/Zookeeper lancés</button>
+      <div class="done-badge" id="done1"><i class="ti ti-circle-check"></i> Section 1 complétée</div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section">
+    <div class="sec-head" onclick="toggle('s2')">
+      <div class="sec-num" style="background:#f59e0b">2</div>
+      <div class="sec-title">Créer et décrire le topic transactions</div>
+      <div class="sec-right">
+        <div class="sec-dur"><i class="ti ti-clock"></i> 5 min</div>
+        <div class="sec-status st-todo" id="st2">À faire</div>
+        <i class="ti ti-chevron-down chevron" id="ch2"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b2">
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Créer le topic avec 3 partitions</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">kafka-topics.sh</span> <span class="fl">--create</span> <span class="pt">--bootstrap-server</span> <span class="ar">localhost:9092</span> <span class="pt">--topic</span> <span class="ar">transactions</span> <span class="pt">--partitions</span> <span class="ar">3</span></div><button class="copy-btn" onclick="copyCmd(this,'kafka-topics.sh --create --bootstrap-server localhost:9092 --topic transactions --partitions 3')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ Created topic transactions</span></div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Voir les détails (partitions + replicas)</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">kafka-topics.sh</span> <span class="fl">--describe</span> <span class="pt">--topic</span> <span class="ar">transactions</span> <span class="pt">--bootstrap-server</span> <span class="ar">localhost:9092</span></div><button class="copy-btn" onclick="copyCmd(this,'kafka-topics.sh --describe --topic transactions --bootstrap-server localhost:9092')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">Topic: transactions    PartitionCount: 3    ReplicationFactor: 1<br/>Partition: 0    Leader: 1001    Replicas: 1001<br/>Partition: 1    Leader: 1001    Replicas: 1001<br/>Partition: 2    Leader: 1001    Replicas: 1001</span></div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-title">📊 À retenir</div>
+        <strong>PartitionCount: 3</strong> = 3 partitions (parallélisme)<br>
+        <strong>ReplicationFactor: 1</strong> = pas de redondance<br>
+        <strong>Leader: 1001</strong> = broker leader<br>
+        <strong>Isr: 1001</strong> = In-Sync Replicas
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s2','done2','st2');updateProgress()"><i class="ti ti-circle-check"></i> Topic créé</button>
+      <div class="done-badge" id="done2"><i class="ti ti-circle-check"></i> Section 2 complétée</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : CAS D'ÉTUDE COMPLET -->
+  <div class="section">
+    <div class="sec-head" onclick="toggle('s3')">
+      <div class="sec-num" style="background:#ec4899">3</div>
+      <div class="sec-title">Cas d'étude : Pipeline AML temps-réel</div>
+      <div class="sec-right">
+        <div class="sec-dur"><i class="ti ti-clock"></i> 25 min</div>
+        <div class="sec-status st-todo" id="st3">À faire</div>
+        <i class="ti ti-chevron-down chevron" id="ch3"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b3">
+
+      <!-- CONTEXTE MÉTIER -->
+      <div class="context-box">
+        <div class="context-title"><i class="ti ti-briefcase"></i> CONTEXTE MÉTIER</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.8">
+          <strong>Problème :</strong> Banque marocaine reçoit 500 transactions/sec. Doit détecter les opérations suspectes EN TEMPS-RÉEL.<br><br>
+          <strong>Loi LCBFT :</strong> Lutte Contre le Blanchiment de Capitaux et le Financement du Terrorisme = obligation légale.<br><br>
+          <strong>Enjeu :</strong> Non-respect = amendes massives + fermeture de compte.
+        </div>
+      </div>
+
+      <!-- OBJECTIFS -->
+      <div class="objectives-box">
+        <div class="objectives-title"><i class="ti ti-target"></i> OBJECTIFS</div>
+        <div class="obj-item"><span class="obj-check">✅</span><span>Comprendre Producer = simule 500 tx/sec</span></div>
+        <div class="obj-item"><span class="obj-check">✅</span><span>Comprendre Consumer = filtre AML 3 règles</span></div>
+        <div class="obj-item"><span class="obj-check">✅</span><span>Voir les données brutes → filtrées → alertées</span></div>
+        <div class="obj-item"><span class="obj-check">✅</span><span>Utiliser Kafka-UI pour monitoring production</span></div>
+      </div>
+
+      <!-- ARCHITECTURE -->
+      <div class="concept">
+        <div class="concept-title">🏗️ ARCHITECTURE KAFKA</div>
+        <strong>Producer :</strong> Simule 500 tx/sec avec délai visible (100ms)<br>
+        <strong>Topic :</strong> 3 partitions pour parallélisme<br>
+        <strong>Consumer :</strong> Applique 3 règles AML (montant > 10k MAD, pays blacklist, fraude)<br>
+        <strong>EOS :</strong> Exactly-Once Semantics = zéro doublon
+      </div>
+
+      <!-- QUIZ CONCEPTUEL -->
+      <div class="quiz-block" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin:12px 0">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:6px"><i class="ti ti-brain"></i> QUIZ : Comprendre le concept</div>
+
+        <div style="margin-bottom:14px">
+          <div class="quiz-q">Q1: Pourquoi Kafka plutôt qu'une base de données ?</div>
+          <div class="opts">
+            <div class="opt" onclick="showFeedback(this,'q1','ok')">✅ Traite 500 msg/sec en temps-réel (BD trop lente)</div>
+            <div class="opt" onclick="showFeedback(this,'q1','ko')">❌ C'est plus cher</div>
+          </div>
+          <div class="fb fb-ok" id="q1-ok" style="display:none"><strong>✅</strong> Kafka = streaming haute-vitesse. BD = données historiques.</div>
+          <div class="fb fb-ko" id="q1-ko" style="display:none"><strong>❌</strong> Kafka traite les flux temps-réel 500+ msg/sec.</div>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <div class="quiz-q">Q2: Rôle des 3 partitions ?</div>
+          <div class="opts">
+            <div class="opt" onclick="showFeedback(this,'q2','ok')">✅ Paralléliser : 3 consumers peuvent lire en même temps</div>
+            <div class="opt" onclick="showFeedback(this,'q2','ko')">❌ Stocker 3 copies</div>
+          </div>
+          <div class="fb fb-ok" id="q2-ok" style="display:none"><strong>✅</strong> Partitions = distribution/parallélisme.</div>
+          <div class="fb fb-ko" id="q2-ko" style="display:none"><strong>❌</strong> Replication factor fait les copies (ici=1).</div>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <div class="quiz-q">Q3: EOS (Exactly-Once Semantics) ?</div>
+          <div class="opts">
+            <div class="opt" onclick="showFeedback(this,'q3','ok')">✅ Aucune transaction traitée deux fois</div>
+            <div class="opt" onclick="showFeedback(this,'q3','ko')">❌ Chaque message est dupliqué</div>
+          </div>
+          <div class="fb fb-ok" id="q3-ok" style="display:none"><strong>✅</strong> EOS = garantie zéro doublon. Essentiel pour la finance !</div>
+          <div class="fb fb-ko" id="q3-ko" style="display:none"><strong>❌</strong> EOS = opposite : zéro doublon.</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- INSTALLATION -->
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Installer pip3 et kafka-python</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Installation</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">apt-get update</span> <span class="pt">&&</span> <span class="kw">apt-get install</span> <span class="fl">-y</span> <span class="ar">python3-pip</span></div><button class="copy-btn" onclick="copyCmd(this,'apt-get update && apt-get install -y python3-pip')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ Setting up python3-pip...</span></div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Installer kafka-python</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">pip3 install</span> <span class="fl">kafka-python</span></div><button class="copy-btn" onclick="copyCmd(this,'pip3 install kafka-python')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">✅ Successfully installed kafka-python</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- DEMO EN 3 TERMINAUX -->
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Ouvrir Terminal 0 : Voir les messages bruts</div>
+            <div class="step-desc">kafka-console-consumer pour visualiser le flux JSON</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="warn-box">
+        <i class="ti ti-alert-triangle"></i>
+        <div><strong>Ouvrez ce terminal AVANT de lancer le producer.</strong> Il vous permet de voir les messages JSON bruts arrivant.</div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Terminal 0 — kafka-console-consumer</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">kafka-console-consumer.sh</span> <span class="pt">--topic</span> <span class="ar">transactions</span> <span class="pt">--bootstrap-server</span> <span class="ar">localhost:9092</span> <span class="pt">--from-beginning</span></div><button class="copy-btn" onclick="copyCmd(this,'kafka-console-consumer.sh --topic transactions --bootstrap-server localhost:9092 --from-beginning')">Copier</button></div>
+        <div class="cmd-result"><span class="res-info">Attend les messages...<br/>{"tx_id":"TXN_001","amount":15000,"country":"MA"}<br/>{"tx_id":"TXN_002","amount":25000,"country":"IR"}</span></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Terminal 1 : Lancer le Producer</div>
+            <div class="step-desc">Envoie 500 tx/sec avec délai visible (100ms entre batches)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Terminal 1 — Producer</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">cd</span> <span class="ar">/shared_volume/kafka</span><br/><span class="prompt">$ </span><span class="kw">python3</span> <span class="fl">producer.py</span></div><button class="copy-btn" onclick="copyCmd(this,'cd /shared_volume/kafka && python3 producer.py')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">🚀 PRODUCER KAFKA DÉMARRÉ<br/>📁 Chemin: /shared_volume/kafka/producer.py<br/>📤 10 tx | TXN_001... | 15000 MAD<br/>⏸️  Pause de 100ms avant le prochain batch...</span></div>
+      </div>
+
+      <div class="success-box">
+        <i class="ti ti-circle-check"></i>
+        <div><strong>Regardez Terminal 0 !</strong> Les messages JSON doivent défiler (500/sec).</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-title">Terminal 2 : Lancer le Consumer AML</div>
+            <div class="step-desc">Filtre et affiche les alertes (délai 50ms visible)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Terminal 2 — Consumer AML</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="kw">cd</span> <span class="ar">/shared_volume/kafka</span><br/><span class="prompt">$ </span><span class="kw">python3</span> <span class="fl">consumer.py</span></div><button class="copy-btn" onclick="copyCmd(this,'cd /shared_volume/kafka && python3 consumer.py')">Copier</button></div>
+        <div class="cmd-result"><span class="res-ok">🔍 CONSUMER AML DÉMARRÉ<br/>✅ [OK] TxID: TXN_001... | 1500 MAD | MA<br/>🚨 [ALERTE AML] TxID: TXN_002... | 25000 MAD | IR | MONTANT_ÉLEVÉ+PAYS_INTERDIT</span></div>
+      </div>
+
+      <div class="success-box">
+        <i class="ti ti-circle-check"></i>
+        <div><strong>BRAVO !</strong> 3 terminaux actifs : données brutes → production → alertes AML en direct</div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s3','done3','st3');updateProgress()"><i class="ti ti-circle-check"></i> Demo complète</button>
+      <div class="done-badge" id="done3"><i class="ti ti-circle-check"></i> Section 3 complétée</div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 : KAFKA-UI -->
+  <div class="section">
+    <div class="sec-head" onclick="toggle('s4')">
+      <div class="sec-num" style="background:#8b5cf6">4</div>
+      <div class="sec-title">Monitoring avec Kafka-UI</div>
+      <div class="sec-right">
+        <div class="sec-dur"><i class="ti ti-clock"></i> 12 min</div>
+        <div class="sec-status st-todo" id="st4">À faire</div>
+        <i class="ti ti-chevron-down chevron" id="ch4"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b4">
+
+      <div class="concept">
+        <div class="concept-title">🎯 Pourquoi Kafka-UI ?</div>
+        500 msg/sec = impossible de lire le terminal. Kafka-UI donne la vue d'ensemble pour le DevOps.
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-title">Ouvrir Kafka-UI</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-browser"></i> Dans le navigateur</div>
+        <div class="cmd solo"><div class="cmd-text"><span class="pt">http://localhost:8080</span></div><button class="copy-btn" onclick="copyCmd(this,'http://localhost:8080')">Copier</button></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-title">Topics → transactions</div>
+            <div class="step-desc">Observer les 3 partitions et les messages</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-box">
+        <i class="ti ti-circle-check"></i>
+        <div><strong>Vous voyez :</strong> 3 partitions avec ~167 messages chacun (load-balancing)</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-title">Consumer Groups → aml-filter</div>
+            <div class="step-desc">Observer le LAG (très important !)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept">
+        <div class="concept-title">📊 Interprétation LAG</div>
+        <strong>LAG = 0</strong> ✅ Consumer à jour, zéro retard<br>
+        <strong>LAG > 100</strong> ❌ Consumer traîne, risque<br>
+        <strong>LAG croissant</strong> ⚠️ Problème de performance
+      </div>
+
+      <div class="quiz-block" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin:12px 0">
+        <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:10px"><i class="ti ti-brain"></i> QUIZ Kafka-UI</div>
+
+        <div style="margin-bottom:10px">
+          <div class="quiz-q">Q1: LAG = 0 signifie ?</div>
+          <div class="opts">
+            <div class="opt" onclick="showFeedback(this,'u1','ok')">✅ Consumer a lu TOUS les messages (zéro retard)</div>
+            <div class="opt" onclick="showFeedback(this,'u1','ko')">❌ Le topic est vide</div>
+          </div>
+          <div class="fb fb-ok" id="u1-ok" style="display:none"><strong>✅</strong> LAG = 0 = parfait</div>
+          <div class="fb fb-ko" id="u1-ko" style="display:none"><strong>❌</strong> LAG = retard du consumer</div>
+        </div>
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s4','done4','st4');updateProgress()"><i class="ti ti-circle-check"></i> Kafka-UI exploré</button>
+      <div class="done-badge" id="done4"><i class="ti ti-circle-check"></i> Section 4 complétée</div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 : CLEANUP -->
+  <div class="section">
+    <div class="sec-head" onclick="toggle('s5')">
+      <div class="sec-num" style="background:#6366f1">5</div>
+      <div class="sec-title">Cleanup et résumé</div>
+      <div class="sec-right">
+        <div class="sec-dur"><i class="ti ti-clock"></i> 2 min</div>
+        <div class="sec-status st-todo" id="st5">À faire</div>
+        <i class="ti ti-chevron-down chevron" id="ch5"></i>
+      </div>
+    </div>
+    <div class="sec-body" id="b5">
+      <div class="cmd-block">
+        <div class="cmd-label"><i class="ti ti-terminal"></i> Arrêter les 3 terminaux</div>
+        <div class="cmd"><div class="cmd-text"><span class="prompt">$ </span><span class="prompt">^C</span> <span class="kw"># Ctrl+C dans chaque terminal</span></div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="concept">
+        <div class="concept-title">✅ Vous avez appris</div>
+        • Architecture Kafka (producer → topic → consumer)<br>
+        • Streaming temps-réel (500 tx/sec)<br>
+        • Filtrage AML (3 règles, risk scoring)<br>
+        • EOS (Exactly-Once Semantics)<br>
+        • Monitoring production (Kafka-UI, LAG)<br>
+        • Finance compliance (LCBFT, blacklist)
+      </div>
+
+      <button class="complete-btn" onclick="markDone('s5','done5','st5');updateProgress()"><i class="ti ti-circle-check"></i> Lab 4 terminé !</button>
+      <div class="done-badge" id="done5"><i class="ti ti-circle-check"></i> Lab 4 complété</div>
+    </div>
+  </div>
+
+  <div class="final-box" id="final">
+    <div class="final-icon"><i class="ti ti-flame"></i></div>
+    <div class="final-title">Lab 4 complété !</div>
+    <div class="final-body">Vous avez construit un pipeline Kafka production-ready : 500 tx/sec, AML filtering, EOS garanti, et monitoring temps-réel avec Kafka-UI.</div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  ISCAE Casablanca · Master Finance Digitale · <span>Big Data for Financial Services</span> · 2025-2026
+</footer>
+
+<script>
+  const done={s0:false,s1:false,s2:false,s3:false,s4:false,s5:false};
+  const total=6;
+  
+  function toggle(id){
+    const n=id.slice(1);
+    const b=document.getElementById('b'+n);
+    const ch=document.getElementById('ch'+n);
+    const st=document.getElementById('st'+n);
+    const open=b.classList.contains('open');
+    b.classList.toggle('open',!open);
+    ch.style.transform=open?'':'rotate(180deg)';
+    if(!open && st.textContent==='À faire'){
+      st.textContent='En cours';
+      st.className='sec-status st-active';
+    }
+  }
+  
+  function markDone(sid,doneid,stid){
+    if(done[sid]) return;
+    done[sid]=true;
+    const d=document.getElementById(doneid);
+    if(d) d.style.display='flex';
+    const st=document.getElementById(stid);
+    if(st){
+      st.textContent='Complété';
+      st.className='sec-status st-done';
+    }
+  }
+  
+  function updateProgress(){
+    const n=Object.values(done).filter(Boolean).length;
+    document.getElementById('prog').style.width=(n/total*100)+'%';
+    document.getElementById('prog-lbl').textContent=n+' / '+total+' sections complétées';
+    if(n===total) document.getElementById('final').style.display='block';
+  }
+  
+  function copyCmd(btn,text){
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent='Copié !';
+      btn.classList.add('copied');
+      setTimeout(()=>{
+        btn.textContent='Copier';
+        btn.classList.remove('copied');
+      },2000);
+    });
+  }
+  
+  function showFeedback(btn,id,type){
+    const correct=document.getElementById(id+'-ok');
+    const wrong=document.getElementById(id+'-ko');
+    if(correct) correct.style.display='none';
+    if(wrong) wrong.style.display='none';
+    if(type==='ok' && correct){
+      correct.style.display='block';
+      btn.classList.add('correct');
+    }else if(type==='ko' && wrong){
+      wrong.style.display='block';
+      btn.classList.add('wrong');
+    }
+  }
+</script>
+</body>
+</html>

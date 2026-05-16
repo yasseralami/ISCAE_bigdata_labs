@@ -274,8 +274,55 @@
         <div class="concept-title">🏗️ ARCHITECTURE KAFKA</div>
         <strong>Producer :</strong> Simule 500 tx/sec avec délai visible (100ms)<br>
         <strong>Topic :</strong> 3 partitions pour parallélisme<br>
-        <strong>Consumer :</strong> Applique 3 règles AML (montant > 10k MAD, pays blacklist, fraude)<br>
+        <strong>Consumer :</strong> Applique 3 règles AML avec risk scoring<br>
         <strong>EOS :</strong> Exactly-Once Semantics = zéro doublon
+      </div>
+
+      <!-- 3 RÈGLES AML -->
+      <div style="background:linear-gradient(135deg,rgba(239,68,68,0.1) 0%,rgba(248,113,113,0.1) 100%);border-radius:12px;padding:16px;margin:16px 0;border-left:4px solid #ef4444">
+        <div style="font-size:13px;font-weight:600;color:#991b1b;margin-bottom:12px;display:flex;align-items:center;gap:6px"><i class="ti ti-shield-alert"></i> 3 RÈGLES AML IMPLÉMENTÉES</div>
+        
+        <div style="margin-bottom:14px;padding:12px;background:#fff;border-radius:8px;border-left:3px solid #dc2626">
+          <div style="font-size:12px;font-weight:600;color:#1f2937;margin-bottom:4px">1️⃣ MONTANT ÉLEVÉ</div>
+          <div style="font-size:11px;color:#64748b;line-height:1.6">
+            <strong>Condition :</strong> amount > 10 000 MAD<br>
+            <strong>Alors :</strong> risk_score += 40<br>
+            <strong>Logique :</strong> Les transactions importantes sont suspects (blanchiment)
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;padding:12px;background:#fff;border-radius:8px;border-left:3px solid #dc2626">
+          <div style="font-size:12px;font-weight:600;color:#1f2937;margin-bottom:4px">2️⃣ PAYS BLACKLISTÉ (OFAC)</div>
+          <div style="font-size:11px;color:#64748b;line-height:1.6">
+            <strong>Condition :</strong> country IN ['IR', 'KP', 'SY', 'SOM']<br>
+            <strong>Alors :</strong> risk_score += 50<br>
+            <strong>Logique :</strong> Sanctions OFAC (Iran, Corée du Nord, Syrie, Somalie)
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;padding:12px;background:#fff;border-radius:8px;border-left:3px solid #dc2626">
+          <div style="font-size:12px;font-weight:600;color:#1f2937;margin-bottom:4px">3️⃣ FRAUDE DÉTECTÉE</div>
+          <div style="font-size:11px;color:#64748b;line-height:1.6">
+            <strong>Condition :</strong> is_fraud = true<br>
+            <strong>Alors :</strong> risk_score += 35<br>
+            <strong>Logique :</strong> Transactions marquées comme frauduleuses
+          </div>
+        </div>
+
+        <div style="padding:12px;background:linear-gradient(135deg,#fef2f2 0%,#fff5f5 100%);border-radius:8px;border:1px solid #fca5a5;margin-top:12px">
+          <div style="font-size:12px;font-weight:600;color:#991b1b;margin-bottom:6px">⚠️ DÉCISION FINALE</div>
+          <div style="font-size:11px;color:#7f1d1d;line-height:1.6">
+            <strong>SI risk_score > 50</strong> → 🚨 <span style="color:#dc2626;font-weight:600">ALERTE AML</span> (signaler à la police)<br>
+            <strong>SINON</strong> → ✅ <span style="color:#059669;font-weight:600">OK</span> (transaction approuvée)
+          </div>
+        </div>
+
+        <div style="padding:10px;background:#fef2f2;border-radius:8px;margin-top:12px;font-size:11px;color:#64748b;border-left:2px solid #fca5a5">
+          <strong>Exemples :</strong><br>
+          • Montant 15 000 MAD (IR) = 40+50 = 90 → 🚨 ALERTE<br>
+          • Montant 5 000 MAD (MA) = 0 → ✅ OK<br>
+          • Montant 12 000 MAD + fraude (MA) = 40+35 = 75 → 🚨 ALERTE
+        </div>
       </div>
 
       <!-- QUIZ CONCEPTUEL -->
@@ -310,6 +357,26 @@
           </div>
           <div class="fb fb-ok" id="q3-ok" style="display:none"><strong>✅</strong> EOS = garantie zéro doublon. Essentiel pour la finance !</div>
           <div class="fb fb-ko" id="q3-ko" style="display:none"><strong>❌</strong> EOS = opposite : zéro doublon.</div>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <div class="quiz-q">Q4: Transaction de 15 000 MAD vers l'Iran (sans fraude). Alerte ?</div>
+          <div class="opts">
+            <div class="opt" onclick="showFeedback(this,'q4','ok')">✅ OUI : 40 (montant) + 50 (pays) = 90 > 50 → ALERTE</div>
+            <div class="opt" onclick="showFeedback(this,'q4','ko')">❌ NON : c'est une transaction normale</div>
+          </div>
+          <div class="fb fb-ok" id="q4-ok" style="display:none"><strong>✅</strong> Bien ! Les 2 règles se cumulent : montant+pays = 90 points.</div>
+          <div class="fb fb-ko" id="q4-ko" style="display:none"><strong>❌</strong> Faux. Montant > 10k + pays blacklist = ALERTE.</div>
+        </div>
+
+        <div style="margin-bottom:14px">
+          <div class="quiz-q">Q5: Combien de points pour une transaction frauduleuse de 5 000 MAD vers la Somalie ?</div>
+          <div class="opts">
+            <div class="opt" onclick="showFeedback(this,'q5','ok')">✅ 85 (0 montant + 50 pays + 35 fraude) → ALERTE</div>
+            <div class="opt" onclick="showFeedback(this,'q5','ko')">❌ 35 points (juste la fraude)</div>
+          </div>
+          <div class="fb fb-ok" id="q5-ok" style="display:none"><strong>✅</strong> Correct ! La fraude + pays blacklist = 85 points.</div>
+          <div class="fb fb-ko" id="q5-ko" style="display:none"><strong>❌</strong> Les règles se CUMULENT. 50 (pays) + 35 (fraude) = 85.</div>
         </div>
       </div>
 
